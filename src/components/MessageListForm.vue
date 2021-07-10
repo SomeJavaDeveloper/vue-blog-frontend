@@ -1,5 +1,8 @@
+<!-- TEMPLATE FOR DISPLAYING MESSAGES + CREATION FORM -->
+
 <template>
-  <form v-if="profile" @submit.prevent="handleForm">
+<!--  form for adding new message -->
+  <form @submit.prevent="handleForm">
     <label>Body</label>
     <input type="text" v-model="body" name="body"/>
 
@@ -11,7 +14,7 @@
 
     <button>Submit message</button>
   </form>
-
+<!-- display of all existing messages -->
   <div v-for="message in messages" :key="message.id">
     {{ message }} <i @click="deleteMessage(message)" class="fas fa-trash"></i>
   </div>
@@ -27,10 +30,11 @@ export default {
       body: '',
       tempTag: '',
       tags: [],
-      profile: null
+      profile: null // todo authorization
     }
   },
   mounted() {
+    // get request for all message in database
     fetch("/api/message")
         .then(response => response.json())
         .then(data => {
@@ -39,6 +43,8 @@ export default {
     .catch(error => {
       console.log('not logged :)', error)
     })
+
+    // todo for user authorization
     fetch("/api/user")
         .then(response => response.json())
         .then(data => {
@@ -49,6 +55,7 @@ export default {
         })
   },
   methods: {
+    // tag processing of message (only for vue)
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
         this.tempTag = this.tempTag.substr(0, this.tempTag.length - 1)
@@ -58,12 +65,14 @@ export default {
         this.tempTag = ''
       }
     },
+    // processing of created message
     handleForm() {
       const message = {
         body: this.body,
         creationDate: null,
         tags: this.tags
       };
+      // send json format of message to backend
       fetch("/api/message", {
         method: 'POST',
         mode: 'cors',

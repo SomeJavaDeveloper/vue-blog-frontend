@@ -1,3 +1,5 @@
+<!-- MAIN PAGE OF APPLICATION (TODO) -->
+
 <template>
   <h2 class="block" style="text-align: left">Main page of application</h2>
   <h2 class="block" style="text-align: right">Log in</h2>
