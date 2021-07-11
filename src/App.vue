@@ -1,16 +1,41 @@
 <template>
   <div>
     <h2 class="block" style="text-align: center">
-      <router-link to="/user">Profiel</router-link>
+      <router-link to="/user">Profile</router-link>
     </h2>
     <router-link to="/">Main page</router-link>
+    <h2 class="block" style="text-align: right">
+      <router-link to="/login">Log in</router-link>
+      <button @click="logout">Logout</button>
+    </h2>
   </div>
   <router-view/>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    //sending request for logout to backend
+    logout() {
+      fetch("/api/logout", {
+        method: 'GET',
+        mode: 'no-cors',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      })
+          .then(response => response.json())
+          .then(data => {
+            console.log('data', data)
+          })
+          .catch(error => {
+            console.log('logout', error)
+          })
+      location.href = '/'
+    }
+  }
 }
 </script>
 

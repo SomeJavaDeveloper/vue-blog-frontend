@@ -1,13 +1,11 @@
 <!-- Test file for vue routing -->
 
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+    <h1>This is a profile page</h1>
 </template>
 
 <script>
 export default {
-  name: 'About'
+  name: 'Profile'
 }
 </script>

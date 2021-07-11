@@ -2,7 +2,7 @@
 
 <template>
 <!--  form for adding new message -->
-  <form @submit.prevent="handleForm">
+  <form @submit.prevent="handleForm" v-show="profile">
     <label>Body</label>
     <input type="text" v-model="body" name="body"/>
 
@@ -41,17 +41,18 @@ export default {
           this.messages = data
         })
     .catch(error => {
-      console.log('not logged :)', error)
+      console.log('messages getting', error)
     })
 
-    // todo for user authorization
+    // todo for user authorization (now it's probably getting user data from backend)
     fetch("/api/user")
         .then(response => response.json())
         .then(data => {
-          this.profile = data.profile
+          this.profile = data
+          console.log(this.profile)
         })
         .catch(error => {
-          console.log('not logged :)', error)
+          console.log('user getting', error)
         })
   },
   methods: {
