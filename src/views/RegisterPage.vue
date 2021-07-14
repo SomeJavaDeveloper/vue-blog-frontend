@@ -61,19 +61,6 @@ export default {
               this.password = ''
               console.log(error)
             })
-        .then(response => response.text())
-        .then(data => {
-          console.log('Success:', data)
-          location.href = '/login'
-          this.username = ''
-          this.password = ''
-        })
-        .catch(error => {
-          //todo error processing after fetching BAD_CREDENTIALS response (look java MainController class)
-          this.password = ''
-          console.log('Check the validity of username or password')
-          console.log(error)
-        })
       }
     },
     validateUsername() {
