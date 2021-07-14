@@ -36,6 +36,7 @@ export default {
       fetch("/api/logout", {
         method: 'GET',
         mode: 'no-cors',
+        //не нужно
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
