@@ -30,8 +30,7 @@ export default {
     handleForm() {
       const user = {
         username: this.username,
-        password: this.password,
-        creationDate: null,
+        password: this.password
       };
       // send json format of user to backend
       fetch("/api/login", {
@@ -43,15 +42,21 @@ export default {
         },
         body: JSON.stringify(user),
       })
-          .then(response => response.text())
-          .then(data => {
-            console.log('Success:', data)
-            location.href = '/'
+          .then(response => {
+            let status = response.status;
+            if (status === 502) {
+              console.log('Wrong login')
+            }
+            if (status === 400) {
+              console.log('Wrong password')
+            }
+            if (status === 200)
+              this.$router.push({name: 'Main'})
+            // eslint-disable-next-line no-unused-vars
           })
           .catch(error => {
-            //todo error processing after fetching BAD_CREDENTIALS response (look java UserController class)
+            // something bad happened during the request
             this.password = ''
-            console.log('Check the validity of username or password')
             console.log(error)
           })
     },

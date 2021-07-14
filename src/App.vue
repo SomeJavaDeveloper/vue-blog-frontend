@@ -6,15 +6,30 @@
     <router-link to="/">Main page</router-link>
     <h2 class="block" style="text-align: right">
       <router-link to="/login">Log in</router-link>
-      <button @click="logout">Logout</button>
+      <button v-show="profile" @click="logout">Logout</button>
     </h2>
+    <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <script>
 export default {
   name: 'App',
+  data() {
+    return {
+
+    }
+  },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
+    }
+  },
   methods: {
     //sending request for logout to backend
     logout() {

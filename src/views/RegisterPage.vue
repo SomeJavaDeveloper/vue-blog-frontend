@@ -3,12 +3,13 @@
   <form>
     <form @submit.prevent="handleForm">
       <label>Username</label>
-      <input type="text" v-model="username" @keyup="validateName" name="name"/>
+      <input type="text" v-model="username" @keyup="validateUsername" name="name"/>
+      <p> {{ notValidNameMessage }}</p>
       <br/>
       <label>Password</label>
-      <input type="password" v-model="password" @keyup="validatePass" name="password"/>
+      <input type="password" v-model="password" @keyup="validatePassword" name="password"/>
+      <p> {{ notValidPassMessage }}</p>
       <br/>
-
       <button>Register user</button>
     </form>
   </form>
@@ -19,45 +20,66 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      isUsernameValid: false,
+      isPasswordValid: false,
+      notValidNameMessage: '',
+      notValidPassMessage: ''
     }
   },
   methods: {
     handleForm() {
-      const user = {
-        username: this.username,
-        password: this.password,
-        creationDate: null,
-      };
-      // send json format of user to backend
-      fetch("/api/user", {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user),
-      })
-          .then(response => response.text())
-          .then(data => {
-            console.log('Success:', data)
-            location.href = '/login'
-            this.username = ''
-            this.password = ''
-          })
-          .catch(error => {
-            //todo error processing after fetching BAD_CREDENTIALS response (look java MainController class)
-            this.password = ''
-            console.log('Check the validity of username or password')
-            console.log(error)
-          })
+
+      if(this.isPasswordValid && this.isUsernameValid) {
+        const user = {
+          username: this.username,
+          password: this.password
+        };
+        // send json format of user to backend
+        fetch("/api/user", {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(user),
+        })
+            .then(response => {
+              let status = response.status
+              if (status === 208) {
+                this.username = ''
+                this.password = ''
+                console.log('User already exists')
+              }
+              if (status === 200)
+                this.$router.push({name: 'Login'})
+
+            })
+            .catch(error => {
+              //something bad happened
+              this.password = ''
+              console.log(error)
+            })
+      }
     },
-    validateName() {
-      //todo username validation
+    validateUsername() {
+      if(/^[a-zA-Z0-9]{5,}$/.test(this.username)) {
+        this.isUsernameValid = true;
+        this.notValidNameMessage = '';
+      } else {
+        this.isUsernameValid = false;
+        this.notValidNameMessage = 'Invalid username';
+      }
     },
-    validatePass() {
-      //todo password validation
+    validatePassword() {
+      if(/^[a-zA-Z0-9]{5,}$/.test(this.password)) {
+        this.isPasswordValid = true;
+        this.notValidPassMessage = '';
+      } else {
+        this.isPasswordValid = false;
+        this.notValidPassMessage = 'Invalid password';
+      }
     }
   }
 }

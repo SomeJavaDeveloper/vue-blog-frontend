@@ -22,6 +22,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'MessageListForm',
   data() {
@@ -49,10 +50,11 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.profile = data
-          console.log(this.profile)
+          this.$store.commit('updateProf', this.profile)
+          console.log('Current profile username:', this.profile.username)
         })
         .catch(error => {
-          console.log('user getting', error)
+          console.log('user getting error', error)
         })
   },
   methods: {
@@ -74,7 +76,7 @@ export default {
         tags: this.tags
       };
       // send json format of message to backend
-      fetch("/api/message", {
+      fetch("/api/message/add", {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -85,7 +87,7 @@ export default {
       })
           .then(response => response.json())
           .then(data => {
-            console.log('Success:', data)
+            console.log('Successful adding message:', data)
             this.messages.push(data)
             this.body = ''
             this.tags = []
