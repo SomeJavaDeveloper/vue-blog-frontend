@@ -1,33 +1,53 @@
 <!-- TEMPLATE FOR DISPLAYING MESSAGES + CREATION FORM -->
 
 <template>
-<!--  form for adding new message -->
+  <div class="main-container__center-container">
+    <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile" class="main-container__new-post">
+      <picture>
+        <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
 
-  <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
-    <label>Body</label>
-    <input type="text" v-model="body" name="body"/>
+      <label>Body</label>
+      <input type="text" v-model="body" name="body"/>
+      <br/>
+      <label>Tags</label>
+      <input type="text" v-model="tempTag" @keyup="addTag" name="tags"/>
+      <div v-for="tag in tags" :key="tag">
+        {{ tag }}
+      </div>
+      <br/>
+      <label>File</label>
+      <input type="file" ref="uploadImage" class="form-control"/>
 
-    <label>Tags</label>
-    <input type="text" v-model="tempTag" @keyup="addTag" name="tags"/>
-    <div v-for="tag in tags" :key="tag">
-      {{ tag }}
-    </div>
+      <button>Submit message</button>
+    </form>
 
-<!--    ...................................-->
-    <label>File</label>
-    <input type="file" ref="uploadImage" class="form-control" required/>
-
-    <button>Submit message</button>
-  </form>
-<!-- display of all existing messages -->
-  <div v-for="message in messages" :key="message.id">
-    {{ message }} <i @click="deleteMessage(message)" class="fas fa-trash"></i>
+    <div v-for="message in messages" :key="message.id" :id="message.id" class="main-container__post">
+        <div class="post_name">
+          <div class="post_logo">
+            <picture>
+              <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+          </div>
+          <div class="post_profile_name">
+            <h1>PROFILE NAME TODO</h1>
+          </div>
+          <div class="post_profile_nickname">
+            <h2>PROFILE NICKNAME TODO</h2>
+          </div>
+          <div class="post_profile_nickname">
+            <i @click="deleteMessage(message)" class="fas fa-trash"></i>
+          </div>
+        </div>
+        <div class="post_text">
+          <p>{{ message }}</p>
+        </div>
+      </div>
   </div>
 
 </template>
 
 <script>
 import axios from 'axios';
+
 export default {
   name: 'MessageListForm',
   data() {
@@ -99,10 +119,9 @@ export default {
         url: 'http://localhost:3000/api/message/add',
         data: data,
       })
-          .then(response => response.json())
           .then(data => {
             console.log('Successful adding message:', data)
-            this.messages.push(data)
+            this.messages.push(data.data)
             this.body = ''
             this.tags = []
           })

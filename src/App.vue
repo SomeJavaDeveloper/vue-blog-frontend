@@ -1,15 +1,47 @@
 <template>
-  <div>
-    <h2 class="block" style="text-align: center">
-      <router-link to="/user">Profile</router-link>
-    </h2>
-    <router-link to="/">Main page</router-link>
-    <h2 class="block" style="text-align: right">
-      <router-link to="/login">Log in</router-link>
-      <button v-show="profile" @click="logout">Logout</button>
-    </h2>
-    <router-view/>
-  </div>
+  <header class="header">
+    <div class="header-container">
+      <div class="header-container__logo-and-search">
+        <img src="https://storage.googleapis.com/vueblog-files-bucket/logo.png" alt=""/>
+        <input type="search" maxlength="25" size="10" placeholder="search...">
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="header-container__right-menu">
+        <!--        ONLY FOR BEAUTY NOW -->
+        <div class="friends">
+          <i class="fas fa-user-friends"></i>
+          <p>friends</p>
+        </div>
+        <div class="messages">
+          <i class="fas fa-inbox"></i>
+          <p>messages</p>
+        </div>
+        <div class="notifications">
+          <i class="fas fa-bell"></i>
+          <p>notifications</p>
+        </div>
+        <!--        ONLY FOR BEAUTY NOW -->
+        <router-link to="/" class="home">
+          <i class="fas fa-home"></i>
+          <p>home</p>
+        </router-link>
+        <router-link v-if="!profile" to="login" class="home">
+          <i class="fas fa-door-closed"></i>
+          <p>Login</p>
+        </router-link>
+      </div>
+
+    </div>
+  </header>
+
+  <router-view/>
+
+<!--  <div>-->
+<!--    <h2 class="block" style="text-align: center">-->
+<!--      <router-link to="/user">Profile</router-link>-->
+<!--    </h2>-->
+<!--    <router-link to="/">Main page</router-link>-->
+<!--  </div>-->
 </template>
 
 <script>
@@ -31,49 +63,10 @@ export default {
     }
   },
   methods: {
-    //sending request for logout to backend
-    logout() {
-      fetch("/api/logout", {
-        method: 'GET',
-        mode: 'no-cors',
-        //не нужно
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      })
-          .then(response => response.json())
-          .then(data => {
-            console.log('data', data)
-          })
-          .catch(error => {
-            console.log('logout', error)
-          })
-      location.href = '/'
-    }
+
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
