@@ -2,7 +2,8 @@
 
 <template>
 <!--  form for adding new message -->
-  <form @submit.prevent="handleForm" v-show="profile">
+
+  <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
     <label>Body</label>
     <input type="text" v-model="body" name="body"/>
 
@@ -11,6 +12,10 @@
     <div v-for="tag in tags" :key="tag">
       {{ tag }}
     </div>
+
+<!--    ...................................-->
+    <label>File</label>
+    <input type="file" ref="uploadImage" class="form-control" required/>
 
     <button>Submit message</button>
   </form>
@@ -22,7 +27,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 export default {
   name: 'MessageListForm',
   data() {
@@ -31,7 +36,8 @@ export default {
       body: '',
       tempTag: '',
       tags: [],
-      profile: null // todo authorization
+      profile: null, // todo authorization
+      formData: null
     }
   },
   mounted() {
@@ -75,15 +81,23 @@ export default {
         creationDate: null,
         tags: this.tags
       };
-      // send json format of message to backend
-      fetch("/api/message/add", {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(message),
+      const json = JSON.stringify(message);
+      const blobJson = new Blob([json], {
+        type: 'application/json'
+      });
+
+      const file = this.$refs.uploadImage.files[0];
+      const blobData = new Blob([file], {
+        type: 'multipart/form-data'
+      });
+
+      const data = new FormData();
+      data.append("text", blobJson);
+      data.append("file", blobData);
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/api/message/add',
+        data: data,
       })
           .then(response => response.json())
           .then(data => {
