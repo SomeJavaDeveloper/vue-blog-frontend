@@ -2,24 +2,14 @@
 
 <template>
   <div class="main-container__center-container">
-    <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile" class="main-container__new-post">
-      <picture>
-        <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
-
-      <label>Body</label>
-      <input type="text" v-model="body" name="body"/>
-      <br/>
-      <label>Tags</label>
-      <input type="text" v-model="tempTag" @keyup="addTag" name="tags"/>
-      <div v-for="tag in tags" :key="tag">
-        {{ tag }}
-      </div>
-      <br/>
-      <label>File</label>
-      <input type="file" ref="uploadImage" class="form-control"/>
-
-      <button>Submit message</button>
-    </form>
+    <a class="main-container__new-post" href="#new-post-popup">
+      <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+      <a href="#new-post-popup">
+        <button>
+          <h1>new post</h1>
+        </button>
+      </a>
+    </a>
 
     <div v-for="message in messages" :key="message.id" :id="message.id" class="main-container__post">
         <div class="post_name">
@@ -31,16 +21,64 @@
             <h1>PROFILE NAME TODO</h1>
           </div>
           <div class="post_profile_nickname">
-            <h2>PROFILE NICKNAME TODO</h2>
+            <h2>{{ message.user.username }}</h2>
           </div>
-          <div class="post_profile_nickname">
+          <div style="margin-left: 6px">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
         <div class="post_text">
-          <p>{{ message }}</p>
+          <p>{{ message.body }} + {{ message.tags }} + {{ message.creationDate }}</p>
         </div>
       </div>
+  </div>
+
+  <div class="new-post-popup" id="new-post-popup">
+    <div class="new-post-popup_body">
+      <div class="new-post-popup_content">
+        <div class="new-post-popup-header">
+          <div class="new-post-popup-img">
+            <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
+          </div>
+          <div class="new-post-popup-name-and-nick">
+            <h1>PROFILE NAME TODO</h1>
+            <h2 v-if="profile">{{ profile.username }}</h2>
+            <h2 v-else>No user (forbidden)</h2>
+          </div>
+        </div>
+        <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
+          <div class="new-post-popup-text">
+            <textarea type="text" v-model="body" name="body" placeholder="Type your post here" maxlength="400"/>
+          </div>
+          <div class="new-post-popup-tag">
+            <input type="text" v-model="tempTag" @keyup="addTag" name="tags" placeholder="Type your tags here" maxlength="400"/>
+            <a v-for="tag in tags" :key="tag" style="font-size: 16px">
+              #{{ tag }}&nbsp;
+            </a>
+          </div>
+          <div class="new-post-popup-file-and-send">
+            <div class="new-post-popup-file">
+              <input type="file" id="post-file" ref="uploadImage" multiple accept="image/*,video/*">
+              <button>
+                <label for="post-file">
+                  <h1>Add image</h1>
+                </label>
+              </button>
+            </div>
+            <div class="new-post-popup-send">
+              <button>
+                <h1>Send post</h1>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <a href="#" class="new-post-popup_close" id="popup_close">
+          <i class="fas fa-times"></i>
+        </a>
+
+      </div>
+    </div>
   </div>
 
 </template>
@@ -88,7 +126,7 @@ export default {
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
         this.tempTag = this.tempTag.substr(0, this.tempTag.length - 1)
-        if (!this.tags.includes(this.tempTag)) {
+        if (!this.tags.includes(this.tempTag) && this.tempTag.indexOf(' ') === -1) {
           this.tags.push(this.tempTag)
         }
         this.tempTag = ''
@@ -121,13 +159,14 @@ export default {
       })
           .then(data => {
             console.log('Successful adding message:', data)
-            this.messages.push(data.data)
+            this.messages.splice(0, 0, data.data)
             this.body = ''
             this.tags = []
           })
           .catch(error => {
             console.log('Error happened', error)
           })
+      document.getElementById("popup_close").click()
     },
     deleteMessage(message) {
       fetch("/api/message/" + message.id, {
