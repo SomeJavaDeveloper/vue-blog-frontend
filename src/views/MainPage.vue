@@ -89,7 +89,7 @@ export default {
     logout() {
       fetch("/api/logout", {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         //не нужно
         headers: {
           'Accept': 'application/json',

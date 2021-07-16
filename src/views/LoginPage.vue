@@ -32,13 +32,30 @@ export default {
         username: this.username,
         password: this.password
       };
+      function getCookie(name) {
+        if (!document.cookie) {
+          return null;
+        }
+
+        const xsrfCookies = document.cookie.split(';')
+            .map(c => c.trim())
+            .filter(c => c.startsWith(name + '='));
+
+        if (xsrfCookies.length === 0) {
+          return null;
+        }
+        return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+      }
+      const csrfToken = getCookie('XSRF-TOKEN')
+      console.log(csrfToken)
       // send json format of user to backend
       fetch("/api/login", {
         method: 'POST',
         mode: 'cors',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': csrfToken
         },
         body: JSON.stringify(user),
       })
@@ -52,7 +69,6 @@ export default {
             }
             if (status === 200)
               this.$router.push({name: 'Main'})
-            // eslint-disable-next-line no-unused-vars
           })
           .catch(error => {
             // something bad happened during the request
