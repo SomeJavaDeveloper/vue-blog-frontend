@@ -12682,6 +12682,11 @@ html body {
   margin-top: -19px;
 }
 
+.main-container__center-container .main-container__post .post_tags a {
+  font-size: 14pt;
+  margin-left: 10px;
+}
+
 .main-container__center-container .main-container__post img {
   max-height: 300px;
   border-radius: 50px;

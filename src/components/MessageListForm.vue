@@ -2,7 +2,7 @@
 
 <template>
   <div class="main-container__center-container">
-    <a class="main-container__new-post" href="#new-post-popup">
+    <a class="main-container__new-post" href="#new-post-popup" v-show="profile">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       <a href="#new-post-popup">
         <button>
@@ -11,7 +11,7 @@
       </a>
     </a>
 
-    <div v-for="message in messages" :key="message.id" :id="message.id" class="main-container__post">
+    <div v-for="message in messages" :key="message.id" :id="message.id + 1" class="main-container__post">
         <div class="post_name">
           <div class="post_logo">
             <picture>
@@ -24,12 +24,36 @@
             <h2>{{ message.user.username }}</h2>
           </div>
           <div style="margin-left: 6px">
+            {{ message.creationDate }}
+          </div>
+          <div style="margin-left: 6px">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
         <div class="post_text">
-          <p>{{ message.body }} + {{ message.tags }} + {{ message.creationDate }}</p>
+          <p>{{ message.body }}</p>
         </div>
+        <a :href="'#' + message.id">
+          <picture><img :src="message.photoLink" alt=""></picture>
+        </a>
+        <div class="popup" :id="message.id">
+          <div class="popup_body">
+            <div class="popup_content">
+              <a :href="'#' + message.id + 1" class="popup_close">
+                <i class="fas fa-times"></i>
+              </a>
+              <div class="popup_img">
+                <img :src="message.photoLink" alt="">
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <a class="post_tags">
+          <a v-for="tag in message.tags" :key="tag">
+            #{{ tag }}
+          </a>
+        </a>
       </div>
   </div>
 
@@ -59,14 +83,14 @@
           <div class="new-post-popup-file-and-send">
             <div class="new-post-popup-file">
               <input type="file" id="post-file" ref="uploadImage" multiple accept="image/*,video/*">
-              <button>
+              <button type="button">
                 <label for="post-file">
                   <h1>Add image</h1>
                 </label>
               </button>
             </div>
             <div class="new-post-popup-send">
-              <button>
+              <button type="submit">
                 <h1>Send post</h1>
               </button>
             </div>
@@ -133,11 +157,12 @@ export default {
       }
     },
     // processing of created message
-    handleForm() {
+    async handleForm() {
       const message = {
         body: this.body,
         creationDate: null,
-        tags: this.tags
+        tags: this.tags,
+        photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
       };
       const json = JSON.stringify(message);
       const blobJson = new Blob([json], {
@@ -148,29 +173,52 @@ export default {
       const blobData = new Blob([file], {
         type: 'multipart/form-data'
       });
-
       const data = new FormData();
       data.append("text", blobJson);
-      data.append("file", blobData);
-      axios({
+      if (file)
+        data.append("file", blobData);
+      else
+        data.append("file", new Blob([], {
+          type: 'multipart/form-data'
+        }));
+
+      await axios({
         method: 'post',
         url: 'http://localhost:3000/api/message/add',
         data: data,
       })
           .then(data => {
             console.log('Successful adding message:', data)
-            this.messages.splice(0, 0, data.data)
             this.body = ''
             this.tags = []
           })
           .catch(error => {
             console.log('Error happened', error)
           })
-      document.getElementById("popup_close").click()
+      location.href = '/'
     },
     deleteMessage(message) {
+      function getCookie(name) {
+        if (!document.cookie) {
+          return null;
+        }
+
+        const xsrfCookies = document.cookie.split(';')
+            .map(c => c.trim())
+            .filter(c => c.startsWith(name + '='));
+
+        if (xsrfCookies.length === 0) {
+          return null;
+        }
+        return decodeURIComponent(xsrfCookies[0].split('=')[1]);
+      }
+      const csrfToken = getCookie('XSRF-TOKEN')
+
       fetch("/api/message/" + message.id, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+        'X-XSRF-TOKEN': csrfToken
+        }
       })
           .then(response => response.text())
           .then(response => {
