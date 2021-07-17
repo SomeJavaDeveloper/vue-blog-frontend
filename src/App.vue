@@ -52,6 +52,9 @@ export default {
 
     }
   },
+  methods: {
+
+  },
   computed: {
     profile: {
       get() {
@@ -61,9 +64,6 @@ export default {
         this.$store.commit('updateProf', profile)
       }
     }
-  },
-  methods: {
-
   }
 }
 </script>

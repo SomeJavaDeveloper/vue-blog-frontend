@@ -84,6 +84,16 @@ export default {
 
     }
   },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
+    }
+  },
   methods: {
     //sending request for logout to backend
     logout() {
@@ -105,17 +115,7 @@ export default {
           })
       location.href = '/'
     }
-  },
-  computed: {
-    profile: {
-      get() {
-        return this.$store.state.userProf
-      },
-      set(profile) {
-        this.$store.commit('updateProf', profile)
-      }
-    }
-  },
+  }
 }
 </script>
 

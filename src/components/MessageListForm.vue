@@ -26,7 +26,7 @@
           <div style="margin-left: 6px">
             {{ message.creationDate }}
           </div>
-          <div style="margin-left: 6px">
+          <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
@@ -54,6 +54,11 @@
             #{{ tag }}
           </a>
         </a>
+      <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
+        <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
+        <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
+        <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
+      </h1>
       </div>
   </div>
 
@@ -61,8 +66,8 @@
     <div class="new-post-popup_body">
       <div class="new-post-popup_content">
         <div class="new-post-popup-header">
-          <div class="new-post-popup-img">
-            <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
+          <div>
+            <img style="width: 80px; height: 80px" src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
           </div>
           <div class="new-post-popup-name-and-nick">
             <h1>PROFILE NAME TODO</h1>
@@ -80,9 +85,10 @@
               #{{ tag }}&nbsp;
             </a>
           </div>
+          <img style="max-height: 300px; border-radius: 50px; padding: 20px 20px 20px 20px; width: 100%; cursor: pointer;" v-if="url" :src="url" alt="">
           <div class="new-post-popup-file-and-send">
             <div class="new-post-popup-file">
-              <input type="file" id="post-file" ref="uploadImage" multiple accept="image/*,video/*">
+              <input type="file" @change="onFileChange" id="post-file" ref="uploadImage" multiple accept="image/*,video/*">
               <button type="button">
                 <label for="post-file">
                   <h1>Add image</h1>
@@ -97,7 +103,7 @@
           </div>
         </form>
 
-        <a href="#" class="new-post-popup_close" id="popup_close">
+        <a href="#" class="new-post-popup_close" id="popup_close" @click="clearData">
           <i class="fas fa-times"></i>
         </a>
 
@@ -118,8 +124,9 @@ export default {
       body: '',
       tempTag: '',
       tags: [],
-      profile: null, // todo authorization
-      formData: null
+      profile: null,
+      formData: null,
+      url: null
     }
   },
   mounted() {
@@ -132,8 +139,6 @@ export default {
     .catch(error => {
       console.log('messages getting', error)
     })
-
-    // todo for user authorization (now it's probably getting user data from backend)
     fetch("/api/user")
         .then(response => response.json())
         .then(data => {
@@ -146,6 +151,40 @@ export default {
         })
   },
   methods: {
+    unlike(id) {
+      let res = this.messages.find(obj => {
+        return obj.id === id
+      })
+      res.userLikes.splice(res, 1)
+      fetch("/api/message/unlike/" + id)
+          .then(response => response.text())
+          .catch(error => {
+            console.log('like', error)
+          })
+    },
+    like(id) {
+      let res = this.messages.find(obj => {
+        return obj.id === id
+      })
+      res.userLikes.push(this.profile.id)
+      fetch("/api/message/like/" + id)
+          .then(response => response.text())
+          .catch(error => {
+            console.log('unlike', error)
+          })
+    },
+    repost(id) {
+      console.log(id)
+    },
+    clearData() {
+      this.body = ''
+      this.tags = []
+      this.url = ''
+    },
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
     // tag processing of message (only for vue)
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
@@ -157,7 +196,7 @@ export default {
       }
     },
     // processing of created message
-    async handleForm() {
+    handleForm() {
       const message = {
         body: this.body,
         creationDate: null,
@@ -182,20 +221,21 @@ export default {
           type: 'multipart/form-data'
         }));
 
-      await axios({
+      axios({
         method: 'post',
         url: 'http://localhost:3000/api/message/add',
         data: data,
       })
-          .then(data => {
+          .then(response => {
             console.log('Successful adding message:', data)
             this.body = ''
             this.tags = []
+            if (response.status === 200)
+              location.href = '/'
           })
           .catch(error => {
             console.log('Error happened', error)
           })
-      location.href = '/'
     },
     deleteMessage(message) {
       function getCookie(name) {
