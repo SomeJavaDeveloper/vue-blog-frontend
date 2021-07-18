@@ -8,10 +8,10 @@
       </div>
       <div class="header-container__right-menu">
         <!--        ONLY FOR BEAUTY NOW -->
-        <div class="friends">
+        <router-link to="/subscriptions" class="subscriptions">
           <i class="fas fa-user-friends"></i>
-          <p>friends</p>
-        </div>
+          <p>subscriptions</p>
+        </router-link>
         <div class="messages">
           <i class="fas fa-inbox"></i>
           <p>messages</p>
