@@ -1,17 +1,21 @@
 <template>
 
-  <div v-if="subscribtions">
-    <div v-for="subscription in subscribtions" :key="subscription.id">
+  <input v-model="inputName" @change="updateList"/>
+  <p>Subscriptions</p>
+  <div v-if="subscriptions">
+    <div v-for="subscription in subscriptions" :key="subscription.id">
       <p>{{ subscription.username }}</p>
       <br>
     </div>
   </div>
 
-  <hr>
-
-  <div v-for="user in users" :key="user.id">
-    <p>{{ user.username }}</p>
-    <br>
+  <div v-if="ifSearched">
+    <hr>
+    <p>Other users</p>
+    <div v-for="user in users" :key="user.id">
+      <p>{{ user.username }}</p>
+      <br>
+    </div>
   </div>
 </template>
 
@@ -22,26 +26,50 @@ export default {
   data() {
     return {
       users: [],
-      subscribtions: []
+      subscriptions: [],
+      inputName: '',
+      ifSearched: false
     }
   },
   mounted() {
+    fetch("/api/subscriptions")
+    .then(response => response.json())
+    .then(data => {
+      this.subscriptions = data
+    })
+    .catch(error => {
+      console.log('subscriptions getting', error)
+    })
     fetch("/api/users")
     .then(response => response.json())
     .then(data => {
       this.users = data
     })
     .catch(error => {
-      console.log('messages getting', error)
+      console.log('users getting', error)
     })
-    fetch("/api/subscriptions")
-    .then(response => response.json())
-    .then(data => {
-      this.subscribtions = data
-    })
-    .catch(error => {
-      console.log('messages getting', error)
-    })
+  },
+  methods: {
+    updateList() {
+      fetch("/api/subscriptions/" + this.inputName)
+      .then(response => response.json())
+      .then(data => {
+        this.subscriptions = data
+      })
+      .catch(error => {
+        console.log('subscriptions getting', error)
+      })
+
+      fetch("/api/users/" + this.inputName)
+      .then(response => response.json())
+      .then(data => {
+        this.users = data
+      })
+      .catch(error => {
+        console.log('users getting', error)
+      })
+      this.ifSearched = this.inputName !== '';
+    }
   }
 }
 </script>
