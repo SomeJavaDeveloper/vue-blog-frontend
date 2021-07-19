@@ -50,8 +50,8 @@
           </div>
         </div>
         <a class="post_tags">
-          <a v-for="tag in message.tags" :key="tag">
-            #{{ tag }}
+          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
+            #{{ tag.content }}
           </a>
         </a>
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
@@ -161,6 +161,17 @@ export default {
         })
   },
   methods: {
+    subTag(tag) {
+      fetch("/api/tags?tag=" + tag.content)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+          })
+          .catch(error => {
+            // something bad happened during the request
+            console.log(error)
+          })
+    },
     unlike(id) {
       let res = this.messages.find(obj => {
         return obj.id === id
