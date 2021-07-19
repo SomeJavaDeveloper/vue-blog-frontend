@@ -6,12 +6,16 @@ import router from './router'
 const store = createStore({
   state() {
     return {
-      userProf: null
+      userProf: null,
+      messages: []
     }
   },
   mutations: {
     updateProf(state, profile) {
       state.userProf = profile
+    },
+    updateMessages(state, messages) {
+      state.messages = messages
     }
   }
 })

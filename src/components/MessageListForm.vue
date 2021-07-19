@@ -120,7 +120,6 @@ export default {
   name: 'MessageListForm',
   data() {
     return {
-      messages: [],
       body: '',
       tempTag: '',
       tags: [],
@@ -129,12 +128,23 @@ export default {
       url: null
     }
   },
+  computed: {
+    messages: {
+      get() {
+        return this.$store.state.messages
+      },
+      set(messages) {
+        this.$store.commit('updateMessages', messages)
+      }
+    }
+  },
   mounted() {
     // get request for all message in database
     fetch("/api/message")
         .then(response => response.json())
         .then(data => {
           this.messages = data
+          this.$store.state.messages = this.messages
         })
     .catch(error => {
       console.log('messages getting', error)
@@ -144,7 +154,7 @@ export default {
         .then(data => {
           this.profile = data
           this.$store.commit('updateProf', this.profile)
-          console.log('Current profile username:', this.profile.username)
+          console.log('Current profile username:', this.profile?.username)
         })
         .catch(error => {
           console.log('user getting error', error)
@@ -223,7 +233,7 @@ export default {
 
       axios({
         method: 'post',
-        url: 'http://localhost:3000/api/message/add',
+        url: '/api/message/add',
         data: data,
       })
           .then(response => {

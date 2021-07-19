@@ -5645,7 +5645,7 @@
   content: "";
 }
 
-.fa-user-friends:before {
+.fa-user-subscriptions:before {
   content: "";
 }
 
@@ -11796,7 +11796,7 @@
   content: "";
 }
 
-.fa-user-friends:before {
+.fa-user-subscriptions:before {
   content: "";
 }
 
@@ -12411,7 +12411,8 @@ html body {
 .header .header-container__logo-and-search input {
   margin-left: 10px;
   height: 40px;
-  font-size: 25pt;
+  width: 150px;
+  font-size: 18pt;
 }
 
 .header .header-container__logo-and-search button {
@@ -12467,12 +12468,12 @@ html body {
   margin-bottom: 3px;
 }
 
-.header .header-container__right-menu .friends {
+.header .header-container__right-menu .subscriptions {
   margin: 0 10px;
   cursor: pointer;
 }
 
-.header .header-container__right-menu .friends i {
+.header .header-container__right-menu .subscriptions i {
   font-size: 16pt;
   margin-bottom: 3px;
 }
