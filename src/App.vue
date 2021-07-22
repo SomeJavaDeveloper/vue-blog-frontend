@@ -2,7 +2,9 @@
   <header class="header">
     <div class="header-container">
       <div class="header-container__logo-and-search">
-        <img src="https://storage.googleapis.com/vueblog-files-bucket/logo.png" alt=""/>
+        <router-link to="/">
+          <img src="https://storage.googleapis.com/vueblog-files-bucket/logo.png" alt=""/>
+        </router-link>
         <input type="search" maxlength="25" v-model="toFindText" size="10" placeholder="search..."/>
         <button @click="find"><i class="fas fa-search"></i></button>
         <a style="font-size: 16pt; margin-left: 10px">Find By Tag</a>
@@ -22,11 +24,6 @@
           <i class="fas fa-bell"></i>
           <p>notifications</p>
         </div>
-        <!--        ONLY FOR BEAUTY NOW -->
-        <router-link to="/" class="home">
-          <i class="fas fa-home"></i>
-          <p>home</p>
-        </router-link>
         <router-link v-if="!profile" to="login" class="home">
           <i class="fas fa-door-closed"></i>
           <p>Login</p>

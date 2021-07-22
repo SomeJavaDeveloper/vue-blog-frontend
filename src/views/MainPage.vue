@@ -37,34 +37,13 @@
       <div class="trending">
         <h1>Trending now</h1>
       </div>
-      <div class="trend">
-        <p>trending in Ukraine</p>
-        <h1>#Poland</h1>
-        <h3>19922 folowers</h3>
-      </div>
-      <div class="trend">
-        <p>trending in Ukraine</p>
-        <h1>#Memes</h1>
-        <h3>1187 folowers</h3>
-      </div>
-      <div class="trend">
-        <p>trending in Ukraine</p>
-        <h1>#Elon_Musk</h1>
-        <h3>564 folowers</h3>
-      </div>
-      <div class="trend">
-        <p>trending in Ukraine</p>
-        <h1>#My_wife_is_alien</h1>
-        <h3>7632 folowers</h3>
-      </div>
-      <div class="trend">
-        <p>trending in Ukraine</p>
-        <h1>#hypertension</h1>
-        <h3>22873 folowers</h3>
+      <div class="trend" v-for="tag in tags.slice(0, 5)" :key="tag.id">
+        <h1>#{{ tag.content }}</h1>
+        <h3>{{ tag.numberOfMessages }} followers</h3>
       </div>
       <div class="show-more">
         <a href="">
-          <h1>show more</h1>
+          <h1>show more (todo)</h1>
         </a>
       </div>
     </div>
@@ -81,7 +60,7 @@ export default {
   name: 'MainPage',
   data() {
     return {
-
+      tags: []
     }
   },
   computed: {
@@ -93,6 +72,17 @@ export default {
         this.$store.commit('updateProf', profile)
       }
     }
+  },
+  mounted() {
+    fetch("/api/tags/popular")
+        .then(response => response.json())
+        .then(data => {
+          console.log('data', data)
+          this.tags = data
+        })
+        .catch(error => {
+          console.log('logout', error)
+        })
   },
   methods: {
     //sending request for logout to backend

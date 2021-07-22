@@ -12772,7 +12772,7 @@ html body {
 .main-container__right-container {
   border-radius: 30px;
   background-color: white;
-  height: 500px;
+  height: 400px;
   display: grid;
   grid-template-rows: 50px repeat(6, 1fr);
   grid-column-gap: 0px;
@@ -12803,10 +12803,6 @@ html body {
   border-left: 1px solid gainsboro;
   border-right: 1px solid gainsboro;
   border-bottom: 1px solid gainsboro;
-}
-
-.main-container__right-container .trend p {
-  margin-top: 5px;
 }
 
 .main-container__right-container .trend h1 {
