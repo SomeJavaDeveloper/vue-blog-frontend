@@ -31,7 +31,12 @@
       </router-link>
     </div>
 
-    <MessageListForm></MessageListForm>
+    <div v-if="this.path.toString() === '/'">
+      <MessageListForm></MessageListForm>
+    </div>
+    <div v-else-if="this.path.toString() === '/tag'">
+      <TagPage></TagPage>
+    </div>
 
     <div class="main-container__right-container">
       <div class="trending">
@@ -53,14 +58,20 @@
 </template>
 
 <script>
+
+import {useRoute} from 'vue-router';
+import {computed} from 'vue';
 import MessageListForm from "../components/MessageListForm";
+import TagPage from "../components/TagPage";
 
 export default {
-  components: { MessageListForm },
+  components: {TagPage, MessageListForm },
   name: 'MainPage',
   data() {
     return {
-      tags: []
+      tags: [],
+      route: useRoute(),
+      path: computed(() =>this.route.path)
     }
   },
   computed: {
