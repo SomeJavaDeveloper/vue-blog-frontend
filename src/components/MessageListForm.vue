@@ -50,9 +50,13 @@
           </div>
         </div>
         <a class="post_tags">
-          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
+<!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
+<!--            #{{ tag.content }}-->
+<!--          </a>-->
+          <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
             #{{ tag.content }}
           </a>
+<!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
         </a>
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
@@ -171,6 +175,9 @@ export default {
             // something bad happened during the request
             console.log(error)
           })
+    },
+    openTag(tag) {
+      this.$router.push({ name: 'Tag', params: { tag: tag.content } })
     },
     unlike(id) {
       let res = this.messages.find(obj => {
