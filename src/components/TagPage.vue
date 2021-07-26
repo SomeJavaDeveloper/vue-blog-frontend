@@ -1,6 +1,14 @@
 <template>
   <div class="main-container__center-container">
-
+    <div class="main-container__new-post" v-show="profile">
+      <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+      <h1>#{{ tag }}</h1>
+      <a @click="subTag(tag)">
+        <button>
+          <h1>Subscribe</h1>
+        </button>
+      </a>
+    </div>
     <div v-for="message in messages" :key="message.id" :id="message.id + 1" class="main-container__post">
       <div class="post_name">
         <div class="post_logo">
@@ -43,7 +51,7 @@
         <!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
         <!--            #{{ tag.content }}-->
         <!--          </a>-->
-        <a href="#" v-for="tag in message.tags" :key="tag">
+        <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
           #{{ tag.content }}
         </a>
         <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
@@ -99,17 +107,17 @@ export default {
     })
   },
   methods: {
-    // subTag(tag) {
-    //   fetch("/api/tags?tag=" + tag.content)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data)
-    //   })
-    //   .catch(error => {
-    //     // something bad happened during the request
-    //     console.log(error)
-    //   })
-    // },
+    subTag(tag) {
+      fetch("/api/tags?tag=" + tag.content)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        // something bad happened during the request
+        console.log(error)
+      })
+    },
     unlike(id) {
       let res = this.messages.find(obj => {
         return obj.id === id
@@ -134,6 +142,9 @@ export default {
     },
     repost(id) {
       console.log(id)
+    },
+    openTag(tag) {
+      this.$router.push({ name: 'Tag', params: { tag: tag.content } })
     },
     deleteMessage(message) {
       function getCookie(name) {

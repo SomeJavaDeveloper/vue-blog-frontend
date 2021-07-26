@@ -42,10 +42,12 @@
       <div class="trending">
         <h1>Trending now</h1>
       </div>
-      <div class="trend" v-for="tag in tags.slice(0, 5)" :key="tag.id">
-        <h1>#{{ tag.content }}</h1>
-        <h3>{{ tag.numberOfMessages }} followers</h3>
-      </div>
+      <a @click="openTagMain(tag)" href="#" v-for="tag in tags.slice(0, 5)" :key="tag.id">
+        <div class="trend">
+          <h1>#{{ tag.content }}</h1>
+          <h3>{{ tag.numberOfMessages }} followers</h3>
+        </div>
+      </a>
       <div class="show-more">
         <a href="">
           <h1>show more (todo)</h1>
@@ -115,7 +117,10 @@ export default {
             console.log('logout', error)
           })
       location.href = '/'
-    }
+    },
+    openTagMain(tag) {
+      this.$router.push({ name: 'Tag', params: { tag: tag.content } })
+    },
   }
 }
 </script>
