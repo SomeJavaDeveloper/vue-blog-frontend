@@ -7,6 +7,7 @@ import MainPage from "../views/MainPage";
 import LoginPage from "../views/LoginPage";
 import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
+import UsersPage from "../views/UsersPage";
 
 
 const routes = [
@@ -40,6 +41,11 @@ const routes = [
     path: '/subscriptions',
     name: 'Subscriptions',
     component: SubscriptionsPage
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: UsersPage
   }
 ]
 

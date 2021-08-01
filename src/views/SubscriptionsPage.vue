@@ -60,7 +60,7 @@ export default {
         console.log('subscriptions getting', error)
       })
 
-      fetch("/api/users/" + this.inputName)
+      fetch("/api/users-except-current/" + this.inputName)
       .then(response => response.json())
       .then(data => {
         this.users = data
