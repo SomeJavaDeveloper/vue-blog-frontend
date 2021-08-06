@@ -48,21 +48,55 @@
 </template>
 
 <script>
+import MainPage from "./views/MainPage";
+
 export default {
   name: 'App',
+  // eslint-disable-next-line vue/no-unused-components
+  components: {MainPage},
   data() {
     return {
-      toFindText: '',
-      byTag: false
+      pageNumber: 0
+    }
+  },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
+    },
+    byTag: {
+      get() {
+        return this.$store.state.byTag
+      },
+      set(byTag) {
+        this.$store.state.byTag = byTag
+      }
+    },
+    toFindText: {
+      get() {
+        return this.$store.state.toFindText
+      },
+      set(toFindText) {
+        this.$store.state.toFindText = toFindText
+      }
     }
   },
   methods: {
     find() {
-      fetch("/api/message?filter=" + this.toFindText + "&bytag=" + this.byTag)
+      fetch("/api/message?filter=" + (this.toFindText ? this.toFindText : "") + "&bytag=" + this.byTag + "&page=" + this.pageNumber)
           .then(response => response.json())
           .then(data => {
-            this.$store.state.messages = data
-            this.toFindText = ''
+            if (this.pageNumber === 0)
+              this.$store.state.messages = data
+            else
+              this.$store.state.messages = this.$store.state.messages.concat(data.filter(item =>
+                !JSON.stringify(this.$store.state.messages).includes(JSON.stringify(item))
+              ))
+            this.pageNumber++
           })
           .catch(error => {
             // something bad happened during the request
@@ -87,16 +121,6 @@ export default {
             console.log('logout', error)
           })
       location.href = '/'
-    }
-  },
-  computed: {
-    profile: {
-      get() {
-        return this.$store.state.userProf
-      },
-      set(profile) {
-        this.$store.commit('updateProf', profile)
-      }
     }
   }
 }

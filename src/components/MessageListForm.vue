@@ -60,8 +60,8 @@
         <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
       </h1>
       </div>
+    <h1 style="text-align: center" @click="fetchMessages">Show more</h1>
   </div>
-
   <div class="new-post-popup" id="new-post-popup">
     <div class="new-post-popup_body">
       <div class="new-post-popup_content">
@@ -125,7 +125,8 @@ export default {
       tags: [],
       profile: null,
       formData: null,
-      url: null
+      url: null,
+      pageNumber: 0
     }
   },
   computed: {
@@ -139,16 +140,10 @@ export default {
     }
   },
   mounted() {
-    // get request for all message in database
-    fetch("/api/message")
-        .then(response => response.json())
-        .then(data => {
-          this.messages = data
-          this.$store.state.messages = this.messages
-        })
-    .catch(error => {
-      console.log('messages getting', error)
-    })
+    this.pageNumber = 0
+    this.messages = []
+    this.fetchMessages()
+
     fetch("/api/user")
         .then(response => response.json())
         .then(data => {
@@ -161,6 +156,28 @@ export default {
         })
   },
   methods: {
+    fetchMessages() {
+      let byTag = this.$store.state.byTag
+      let toFindText = this.$store.state.toFindText
+      console.log(byTag)
+      console.log(toFindText)
+      // get request for all message in database
+      fetch("/api/message?filter=" + toFindText + "&bytag=" + byTag + "&page=" + this.pageNumber)
+          .then(response => response.json())
+          .then(data => {
+            if (data.length === 0)
+              console.log("That's all messages!") // todo Alert of insufficient messages
+            console.log(data)
+            this.messages = this.messages.concat(data.filter(item =>
+                !JSON.stringify(this.messages).includes(JSON.stringify(item))
+            ))
+            this.$store.state.messages = this.messages
+          })
+          .catch(error => {
+            console.log('messages getting', error)
+          })
+      this.pageNumber++
+    },
     subTag(tag) {
       fetch("/api/tags?tag=" + tag.content)
           .then(response => response.json())
@@ -224,6 +241,8 @@ export default {
         tags: this.tags,
         photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
       };
+      console.log(message)
+
       const json = JSON.stringify(message);
       const blobJson = new Blob([json], {
         type: 'application/json'

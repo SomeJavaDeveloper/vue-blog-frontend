@@ -7,7 +7,9 @@ const store = createStore({
   state() {
     return {
       userProf: null,
-      messages: []
+      messages: [],
+      byTag: false,
+      toFindText: ''
     }
   },
   mutations: {
@@ -16,6 +18,12 @@ const store = createStore({
     },
     updateMessages(state, messages) {
       state.messages = messages
+    },
+    updateByTag(state, byTag) {
+      state.byTag = byTag
+    },
+    updateToFindText(state, toFindText) {
+      state.toFindText = toFindText
     }
   }
 })

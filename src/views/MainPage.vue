@@ -77,7 +77,6 @@ export default {
     fetch("/api/tags/popular")
         .then(response => response.json())
         .then(data => {
-          console.log('data', data)
           this.tags = data
         })
         .catch(error => {
