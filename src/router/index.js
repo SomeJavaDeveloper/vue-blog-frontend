@@ -8,10 +8,16 @@ import LoginPage from "../views/LoginPage";
 import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
 
+
 const routes = [
   {
     path: '/',
     name: 'Main',
+    component: MainPage
+  },
+  {
+    path: '/tag',
+    name: 'Tag',
     component: MainPage
   },
   {
