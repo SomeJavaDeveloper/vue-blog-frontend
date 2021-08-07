@@ -12337,14 +12337,20 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-a,
-a:visited {
+a {
+  color: #8fbcbb;
+  background-color: transparent;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: none;
-}
+/*a,*/
+/*a:visited {*/
+/*  text-decoration: none;*/
+/*}*/
+
+/*a:hover {*/
+/*  text-decoration: none;*/
+/*}*/
 
 ul li {
   list-style: none;
@@ -12352,6 +12358,10 @@ ul li {
 
 img {
   vertical-align: top;
+}
+
+#tagInHat {
+  color: #4c566a;
 }
 
 h1,
@@ -12365,16 +12375,18 @@ h6 {
 }
 
 html body {
-  background-color: seashell;
+  background-color: #2e3440;
+  color: white;
 }
 
 .header {
   margin-bottom: 30px;
-  height: 60px;
+  height: 64px;
   width: 100%;
-  background-color: aqua;
-  -webkit-box-shadow: 0px 4px 0px 0px #25cfdb;
-  box-shadow: 0px 4px 0px 0px #25cfdb;
+  background-color: #88c0d0;
+  /*#d8dee9*/
+  /*-webkit-box-shadow: 0px 4px 0px 0px #25cfdb;*/
+  /*box-shadow: 0px 4px 0px 0px #25cfdb;*/
 }
 
 .header .header-container {
@@ -12511,10 +12523,10 @@ html body {
 
 .main-container__left-container {
   border-radius: 30px;
-  border: 1px solid gainsboro;
+
   position: static;
   top: 20px;
-  background-color: white;
+  background-color: #4c566a;
   display: grid;
   grid-template-rows: 110px 110px repeat(2, 75px) 30px;
   grid-column-gap: 0px;
@@ -12524,16 +12536,16 @@ html body {
 
 .main-container__left-container .main-container__bg {
   border-radius: 30px 30px 0 0;
-  background-color: aqua;
+  background-color: white;
 }
 
 .main-container__left-container .main-container__name {
   text-align: center;
-  border-bottom: 2px solid gainsboro;
+  border-bottom: 2px solid white;
 }
 
 .main-container__left-container .main-container__name img {
-  border: 6px solid white;
+  margin-bottom: 6px;
   border-radius: 50%;
   margin-top: -50px;
   width: 100px;
@@ -12547,13 +12559,13 @@ html body {
 }
 
 .main-container__left-container .main-container__following {
-  border-bottom: 2px solid gainsboro;
+  border-bottom: 2px solid white;
   text-align: center;
   margin-top: 13px;
 }
 
 .main-container__left-container .main-container__following h2 {
-  color: gray;
+  color: white;
   margin-bottom: 10px;
   font-size: 15pt;
 }
@@ -12563,13 +12575,13 @@ html body {
 }
 
 .main-container__left-container .main-container__followers {
-  border-bottom: 2px solid gainsboro;
+  border-bottom: 2px solid white;
   text-align: center;
   margin-top: 13px;
 }
 
 .main-container__left-container .main-container__followers h2 {
-  color: gray;
+  color: white;
   margin-bottom: 10px;
   font-size: 15pt;
 }
@@ -12603,7 +12615,6 @@ html body {
   -ms-flex-align: center;
   align-items: center;
   background-color: white;
-  border-top: 5px solid aqua;
 }
 
 .main-container__center-container .main-container__new-post img {
@@ -12620,7 +12631,7 @@ html body {
   text-decoration: none;
   cursor: pointer;
   margin-right: 20px;
-  background-color: aquamarine;
+  background-color: #88c0d0;
   padding: 15px;
   font-size: 16pt;
   border-radius: 26px;
@@ -12630,8 +12641,8 @@ html body {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
-  -webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
-  box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
+  /*-webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
+  /*box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
 }
 
 .main-container__center-container .main-container__new-post button:active {
@@ -12646,7 +12657,7 @@ html body {
   height: -moz-fit-content;
   height: fit-content;
   border-radius: 20px;
-  background-color: white;
+  background-color: #4c566a;
 }
 
 .main-container__center-container .main-container__post .post_logo img {
@@ -12674,7 +12685,7 @@ html body {
 }
 
 .main-container__center-container .main-container__post .post_name h2 {
-  color: #a7a7a7;
+  color: white;
 }
 
 .main-container__center-container .main-container__post .post_text p {
@@ -12771,7 +12782,7 @@ html body {
 
 .main-container__right-container {
   border-radius: 30px;
-  background-color: white;
+  background-color: #4c566a;
   height: 400px;
   display: grid;
   grid-template-rows: 50px repeat(6, 1fr);
@@ -12791,7 +12802,8 @@ html body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  border: 1px solid gainsboro;
+  /*border: 1px solid #eceff4;*/
+  border-bottom: 1px solid white;
   border-radius: 30px 30px 0 0;
   text-align: center;
 }
@@ -12800,9 +12812,9 @@ html body {
   padding-left: auto;
   padding-right: auto;
   text-align: center;
-  border-left: 1px solid gainsboro;
-  border-right: 1px solid gainsboro;
-  border-bottom: 1px solid gainsboro;
+  /*border-left: 1px solid #eceff4;*/
+  /*border-right: 1px solid #eceff4;*/
+  border-bottom: 1px solid white;
 }
 
 .main-container__right-container .trend h1 {
@@ -12813,13 +12825,13 @@ html body {
 }
 
 .main-container__right-container .trend h3 {
-  color: #a7a7a7;
+  color: white;
 }
 
 .main-container__right-container .show-more {
-  border-left: 1px solid gainsboro;
-  border-right: 1px solid gainsboro;
-  border-bottom: 1px solid gainsboro;
+  /*border-left: 1px solid #eceff4;*/
+  /*border-right: 1px solid #eceff4;*/
+  /*border-bottom: 1px solid #eceff4;*/
   border-radius: 0 0 30px 30px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -12833,7 +12845,7 @@ html body {
 }
 
 .main-container__right-container .show-more h1 {
-  background-color: aquamarine;
+  background-color: #88c0d0;
   text-align: center;
   padding: 15px;
   font-size: 13pt;
@@ -12848,8 +12860,8 @@ html body {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
-  -webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
-  box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
+  /*-webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
+  /*box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
 }
 
 .main-container__right-container .show-more h1:active {
@@ -13073,7 +13085,7 @@ input[name=r] {
 }
 
 .new-post-popup-name-and-nick h2 {
-  color: #a7a7a7;
+  color: white;
   font-size: 17pt;
 }
 
@@ -13131,7 +13143,7 @@ input[name=r] {
 }
 
 .new-post-popup-file button {
-  background-color: aquamarine;
+  background-color: #88c0d0;
   text-align: center;
   padding: 10px;
   font-size: 15pt;
@@ -13146,8 +13158,8 @@ input[name=r] {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
-  -webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
-  box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
+  /*-webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
+  /*box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
 }
 
 .new-post-popup-file h1:active {
@@ -13161,7 +13173,7 @@ input[name=r] {
 }
 
 .new-post-popup-send button {
-  background-color: aquamarine;
+  background-color: #88c0d0;
   text-align: center;
   padding: 10px;
   font-size: 15pt;
@@ -13176,8 +13188,8 @@ input[name=r] {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
-  -webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
-  box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);
+  /*-webkit-box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
+  /*box-shadow: inset -1px 3px 8px 5px aquamarine, 2px 5px 16px 0px aquamarine, 5px 5px 4px 5px rgba(3, 255, 253, 0);*/
 }
 
 .new-post-popup-send h1:active {

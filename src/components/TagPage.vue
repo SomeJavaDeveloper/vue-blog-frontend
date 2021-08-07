@@ -2,10 +2,10 @@
   <div class="main-container__center-container">
     <div class="main-container__new-post" v-show="profile">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
-      <h1>#{{ tag }}</h1>
+      <h1 id="tagInHat">#{{ tag }}</h1>
       <a @click="subTag(tag)">
         <button>
-          <h1>Subscribe</h1>
+          Subscribe
         </button>
       </a>
     </div>
@@ -67,12 +67,17 @@
 
 <script>
 
+// import axios from "axios";
+
+//import router from "../router";
+
 export default {
   name: "TagPage",
   data() {
     return {
       profile: null,
       tag: this.$route.params.tag,
+      tagObject: null,
       messages: []
     }
   },
@@ -87,14 +92,8 @@ export default {
   //   }
   // },
   mounted() {
-    fetch("/api/tags/" + this.tag)
-    .then(response => response.json())
-    .then(data => {
-      this.messages = data
-    })
-    .catch(error => {
-      console.log('messages getting', error)
-    })
+    this.fillMessages()
+
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
@@ -107,6 +106,16 @@ export default {
     })
   },
   methods: {
+    fillMessages() {
+      fetch("/api/tags/" + this.tag)
+      .then(response => response.json())
+      .then(data => {
+        this.messages = data
+      })
+      .catch(error => {
+        console.log('messages getting', error)
+      })
+    },
     subTag(tag) {
       fetch("/api/tags?tag=" + tag.content)
       .then(response => response.json())
@@ -144,7 +153,26 @@ export default {
       console.log(id)
     },
     openTag(tag) {
-      this.$router.push({ name: 'Tag', params: { tag: tag.content } })
+
+      this.tag = tag.content
+
+      // fetch("/api/tags/tag-to-open/" + tag.content)
+      // .then(response => response.text())
+      // .catch(error => {
+      //   console.log('add tag to open', error)
+      // })
+      //
+      // fetch("/api/tags/tag-to-open")
+      // .then(response => response.json())
+      // .then(data => {
+      //   this.tagObject = data
+      //   this.tag = this.tagObject.content
+      //   // console.log(data)
+      //   console.log(this.tagObject)
+      // })
+
+      this.fillMessages()
+
     },
     deleteMessage(message) {
       function getCookie(name) {
