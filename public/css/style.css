@@ -12536,7 +12536,8 @@ html body {
 
 .main-container__left-container .main-container__bg {
   border-radius: 30px 30px 0 0;
-  background-color: white;
+  background-color: #4c566a;
+  border-bottom: 2px solid white;
 }
 
 .main-container__left-container .main-container__name {
