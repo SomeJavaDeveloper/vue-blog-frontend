@@ -17,11 +17,11 @@
       </div>
       <div class="main-container__following">
         <h2>following:</h2>
-        <h3>189</h3>
+        <h3>{{ followingCount.length }}</h3>
       </div>
       <div class="main-container__followers">
         <h2>followers:</h2>
-        <h3>765</h3>
+        <h3>{{ followersCount.length }}</h3>
       </div>
       <div class="main-container__exit-profile" v-if="profile" @click="logout">
         <h1>Logout</h1>
@@ -73,7 +73,9 @@ export default {
     return {
       tags: [],
       route: useRoute(),
-      path: computed(() =>this.route.path)
+      path: computed(() =>this.route.path),
+      followingCount: [],
+      followersCount: []
     }
   },
   computed: {
@@ -95,6 +97,22 @@ export default {
         .catch(error => {
           console.log('logout', error)
         })
+    fetch("/api/subscriptions")
+    .then(response => response.json())
+    .then(data => {
+      this.followingCount = data
+    })
+    .catch(error => {
+      console.log('subscriptions', error)
+    })
+    fetch("/api/subscribers")
+    .then(response => response.json())
+    .then(data => {
+      this.followersCount = data
+    })
+    .catch(error => {
+      console.log('subscribers', error)
+    })
   },
   methods: {
     //sending request for logout to backend
