@@ -2,13 +2,14 @@
   <div class="main-container__center-container">
     <div class="main-container__new-post" v-show="profile">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
-      <h1 id="tagInHat">#{{ tag }}</h1>
+      <h1 id="tagInHat">#{{ $route.params.tagContent }}</h1>
       <a @click="subTag(tag)">
         <button>
           Subscribe
         </button>
       </a>
     </div>
+    <div v-if="messages != null">
     <div v-for="message in messages" :key="message.id" :id="message.id + 1" class="main-container__post">
       <div class="post_name">
         <div class="post_logo">
@@ -51,9 +52,12 @@
         <!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
         <!--            #{{ tag.content }}-->
         <!--          </a>-->
-        <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
+        <router-link
+          v-for="tag in message.tags" :key="tag"
+          :to="{ name: 'Tag', params: { tagContent: tag.content }}"
+          @click="fetchTagsAndMessages(tag.content)">
           #{{ tag.content }}
-        </a>
+        </router-link>
         <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
       </a>
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
@@ -61,6 +65,7 @@
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
         <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
       </h1>
+    </div>
     </div>
   </div>
 </template>
@@ -76,24 +81,12 @@ export default {
   data() {
     return {
       profile: null,
-      tag: this.$route.params.tag,
+      tag: null,
       tagObject: null,
       messages: []
     }
   },
-  // computed: {
-  //   messages: {
-  //     get() {
-  //       return this.$store.state.messages
-  //     },
-  //     set(messages) {
-  //       this.$store.commit('updateMessages', messages)
-  //     }
-  //   }
-  // },
   mounted() {
-    this.fetchMessages()
-
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
@@ -104,13 +97,27 @@ export default {
     .catch(error => {
       console.log('user getting error', error)
     })
+
+    this.fetchTagsAndMessages(this.$route.params.tagContent)
   },
   methods: {
-    fetchMessages() {
-      fetch("/api/tags/" + this.tag)
+    fetchTagsAndMessages(tagC) {
+      fetch("/api/tags/" + this.$route.params.tagContent)
+      .then(response => response.json())
+      .then(data => {
+        this.tag = data
+        console.log('current tag', this.tag)
+        console.log('tagC', this.tag)
+      })
+      .catch(error => {
+        console.log('tag getting error', error)
+      })
+      this.messages = null
+      fetch("/api/tags/messages/" + tagC) // вот тут проблемка
       .then(response => response.json())
       .then(data => {
         this.messages = data
+        console.log('messages', this.messages)
       })
       .catch(error => {
         console.log('messages getting', error)

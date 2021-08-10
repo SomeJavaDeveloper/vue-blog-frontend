@@ -34,7 +34,8 @@
     <div v-if="this.path.toString() === '/'">
       <MessageListForm></MessageListForm>
     </div>
-    <div v-else-if="this.path.toString() === '/tag'">
+    <div v-else>
+<!--         -if="this.path.toString() === '/tag'"-->
       <TagPage></TagPage>
     </div>
 
@@ -42,12 +43,22 @@
       <div class="trending">
         <h1>Trending now</h1>
       </div>
-      <a @click="openTagMain(tag)" href="#" v-for="tag in tags.slice(0, 5)" :key="tag.id">
+
+      <router-link
+        v-for="tag in tags.slice(0, 5)" :key="tag"
+        :to="{ name: 'Tag', params: { tagContent: tag.content }}">
         <div class="trend">
           <h1>#{{ tag.content }}</h1>
           <h3>{{ tag.numberOfMessages }} followers</h3>
         </div>
-      </a>
+      </router-link>
+
+<!--      <a @click="openTagMain(tag)" href="#" v-for="tag in tags.slice(0, 5)" :key="tag.id">-->
+<!--        <div class="trend">-->
+<!--          <h1>#{{ tag.content }}</h1>-->
+<!--          <h3>{{ tag.numberOfMessages }} followers</h3>-->
+<!--        </div>-->
+<!--      </a>-->
       <div class="show-more">
         <a href="">
           <h1>show more (todo)</h1>

@@ -17,12 +17,12 @@ const routes = [
     component: MainPage
   },
   {
-    path: '/tag',
+    path: '/tag/:tagContent',
     name: 'Tag',
     component: MainPage
   },
   {
-    path: '/user',
+    path: '/user/:userId',
     name: 'Profile',
     component: Profile
   },

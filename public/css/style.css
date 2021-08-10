@@ -12601,7 +12601,6 @@ html body {
 
 .main-container__center-container {
   height: 100px;
-  display: grid;
 }
 
 .main-container__center-container .main-container__new-post {
