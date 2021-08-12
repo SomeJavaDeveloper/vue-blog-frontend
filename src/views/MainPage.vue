@@ -10,7 +10,10 @@
         <picture>
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
         <h2 v-if="profile">
-          <router-link to="/user">{{ profile.username }}</router-link>
+          <router-link
+            :to="{ name: 'Profile', params: { username: profile.username }}">
+            {{ profile.username }}
+          </router-link>
         </h2>
         <h2 v-else>No user</h2>
         <p>'Profession'</p>
