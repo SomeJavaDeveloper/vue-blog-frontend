@@ -10,18 +10,21 @@
         <picture>
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
         <h2 v-if="profile">
-          <router-link to="/user">{{ profile.username }}</router-link>
+          <router-link
+            :to="{ name: 'Profile', params: { username: profile.username }}">
+            {{ profile.username }}
+          </router-link>
         </h2>
         <h2 v-else>No user</h2>
         <p>'Profession'</p>
       </div>
       <div class="main-container__following">
         <h2>following:</h2>
-        <h3>189</h3>
+        <h3>{{ followingCount.length }}</h3>
       </div>
       <div class="main-container__followers">
         <h2>followers:</h2>
-        <h3>765</h3>
+        <h3>{{ followersCount.length }}</h3>
       </div>
       <div class="main-container__exit-profile" v-if="profile" @click="logout">
         <h1>Logout</h1>
@@ -34,7 +37,8 @@
     <div v-if="this.path.toString() === '/'">
       <MessageListForm></MessageListForm>
     </div>
-    <div v-else-if="this.path.toString() === '/tag'">
+    <div v-else>
+<!--         -if="this.path.toString() === '/tag'"-->
       <TagPage></TagPage>
     </div>
 
@@ -42,12 +46,22 @@
       <div class="trending">
         <h1>Trending now</h1>
       </div>
-      <a @click="openTagMain(tag)" href="#" v-for="tag in tags.slice(0, 5)" :key="tag.id">
+
+      <router-link
+        v-for="tag in tags.slice(0, 5)" :key="tag"
+        :to="{ name: 'Tag', params: { tagContent: tag.content }}">
         <div class="trend">
           <h1>#{{ tag.content }}</h1>
           <h3>{{ tag.numberOfMessages }} followers</h3>
         </div>
-      </a>
+      </router-link>
+
+<!--      <a @click="openTagMain(tag)" href="#" v-for="tag in tags.slice(0, 5)" :key="tag.id">-->
+<!--        <div class="trend">-->
+<!--          <h1>#{{ tag.content }}</h1>-->
+<!--          <h3>{{ tag.numberOfMessages }} followers</h3>-->
+<!--        </div>-->
+<!--      </a>-->
       <div class="show-more">
         <a href="">
           <h1>show more (todo)</h1>
@@ -73,7 +87,9 @@ export default {
     return {
       tags: [],
       route: useRoute(),
-      path: computed(() =>this.route.path)
+      path: computed(() =>this.route.path),
+      followingCount: [],
+      followersCount: []
     }
   },
   computed: {
@@ -95,6 +111,22 @@ export default {
         .catch(error => {
           console.log('logout', error)
         })
+    fetch("/api/subscriptions")
+    .then(response => response.json())
+    .then(data => {
+      this.followingCount = data
+    })
+    .catch(error => {
+      console.log('subscriptions', error)
+    })
+    fetch("/api/subscribers")
+    .then(response => response.json())
+    .then(data => {
+      this.followersCount = data
+    })
+    .catch(error => {
+      console.log('subscribers', error)
+    })
   },
   methods: {
     //sending request for logout to backend

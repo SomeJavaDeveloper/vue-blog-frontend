@@ -53,9 +53,14 @@
 <!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
 <!--            #{{ tag.content }}-->
 <!--          </a>-->
-          <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
-            #{{ tag.content }}
-          </a>
+<!--          <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
+<!--            #{{ tag.content }}-->
+<!--          </a>-->
+              <router-link
+              v-for="tag in message.tags" :key="tag"
+              :to="{ name: 'Tag', params: { tagContent: tag.content }}">
+                #{{ tag.content }}
+              </router-link>
 <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
         </a>
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
