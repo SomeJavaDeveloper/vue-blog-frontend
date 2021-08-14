@@ -22,7 +22,12 @@
           <h1>PROFILE NAME TODO</h1>
         </div>
         <div class="post_profile_nickname">
-          <h2>{{ message.user.username }}</h2>
+          <h2>
+            <router-link
+              :to="{ name: 'Profile', params: { username: message.user.username }}">
+              {{ message.user.username }}
+            </router-link>
+          </h2>
         </div>
         <div style="margin-left: 6px">
           {{ message.creationDate }}

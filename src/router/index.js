@@ -7,6 +7,7 @@ import MainPage from "../views/MainPage";
 import LoginPage from "../views/LoginPage";
 import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
+import SubscribersPage from "../views/SubscriptionsPage";
 import UsersPage from "../views/UsersPage";
 
 
@@ -38,9 +39,14 @@ const routes = [
     component: RegisterPage
   },
   {
-    path: '/subscriptions',
-    name: 'Subscriptions',
+    path: '/subscriptions/:username',
+    name: 'SubscriptionsPage',
     component: SubscriptionsPage
+  },
+  {
+    path: '/subscribers/:username',
+    name: 'SubscribersPage',
+    component: SubscribersPage
   },
   {
     path: '/users',

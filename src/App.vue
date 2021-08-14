@@ -17,10 +17,10 @@
           <i class="fas fa-users"></i>
           <p>Users</p>
         </router-link>
-        <router-link to="/subscriptions" class="subscriptions">
-          <i class="fas fa-user-friends"></i>
-          <p>subscriptions</p>
-        </router-link>
+<!--        <router-link to="/subscriptions" class="subscriptions">-->
+<!--          <i class="fas fa-user-friends"></i>-->
+<!--          <p>subscriptions</p>-->
+<!--        </router-link>-->
         <div class="messages">
           <i class="fas fa-inbox"></i>
           <p>messages</p>

@@ -12521,6 +12521,19 @@ html body {
   grid-row-gap: 0px;
 }
 
+.main-container__left-container-plug {
+  border-radius: 30px;
+
+  position: static;
+  top: 20px;
+  background-color: #2e3440;;
+  display: grid;
+  grid-template-rows: 110px 110px repeat(2, 75px) 30px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 400px;
+}
+
 .main-container__left-container {
   border-radius: 30px;
 

@@ -21,7 +21,12 @@
           <h1>PROFILE NAME TODO</h1>
         </div>
         <div class="post_profile_nickname">
-          <h2>{{ message.user.username }}</h2>
+          <h2>
+            <router-link
+              :to="{ name: 'Profile', params: { username: message.user.username }}">
+              {{ message.user.username }}
+            </router-link>
+          </h2>
         </div>
         <div style="margin-left: 6px">
           {{ message.creationDate }}
@@ -75,11 +80,11 @@
           <div>
             <img style="width: 80px; height: 80px" src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
           </div>
-          <div class="new-post-popup-name-and-nick">
-            <h1>PROFILE NAME TODO</h1>
-            <h2 v-if="profile">{{ profile.username }}</h2>
-            <h2 v-else>No user (forbidden)</h2>
-          </div>
+<!--          <div class="new-post-popup-name-and-nick">-->
+<!--            <h1>PROFILE NAME TODO</h1>-->
+<!--            <h2 v-if="profile">{{ this.$route.params.username }}</h2>-->
+<!--            <h2 v-else>No user (forbidden)</h2>-->
+<!--          </div>-->
         </div>
         <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
           <div class="new-post-popup-text">
@@ -129,17 +134,26 @@ export default {
       body: '',
       tempTag: '',
       tags: [],
-      profile: null,
+      // profile: null,
       formData: null,
       url: null,
       pageNumber: 0,
       messages: []
     }
   },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
+    }
+  },
   mounted() {
     this.pageNumber = 0
     this.messages = []
-
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
@@ -155,12 +169,8 @@ export default {
   },
   methods: {
     fetchMessages() {
-<<<<<<< HEAD
       console.log(this.profile?.username)
       fetch("/api/message/user/" + this.profile?.username)
-=======
-      fetch("/api/message/user/" + this.$route.params.username)
->>>>>>> 1e4a3141cbe40e76c0618702f48f6fd8402da4bd
       .then(response => response.json())
       .then(data => {
         this.messages = data

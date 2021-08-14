@@ -2,28 +2,38 @@
 
 <template>
   <div class="main-container">
-    <div class="main-container__left-container">
+
+    <div class="main-container__left-container" v-if="profile">
       <div class="main-container__bg">
 
       </div>
       <div class="main-container__name">
         <picture>
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
-        <h2 v-if="profile">
+        <h2>
           <router-link
             :to="{ name: 'Profile', params: { username: profile.username }}">
             {{ profile.username }}
           </router-link>
         </h2>
-        <h2 v-else>No user</h2>
         <p>'Profession'</p>
       </div>
       <div class="main-container__following">
-        <h2>following:</h2>
+        <h2>
+          <router-link
+            :to="{ name: 'SubscriptionsPage', params: { username: profile.username }}">
+            following:
+          </router-link>
+        </h2>
         <h3>{{ followingCount.length }}</h3>
       </div>
       <div class="main-container__followers">
-        <h2>followers:</h2>
+        <h2>
+          <router-link
+            :to="{ name: 'SubscribersPage', params: { username: profile.username }}">
+            followers:
+          </router-link>
+        </h2>
         <h3>{{ followersCount.length }}</h3>
       </div>
       <div class="main-container__exit-profile" v-if="profile" @click="logout">
@@ -33,6 +43,9 @@
         <h1>Login</h1>
       </router-link>
     </div>
+    <div class="main-container__left-container-plug" v-else>
+    </div>
+
 
     <div v-if="this.path.toString() === '/'">
       <MessageListForm></MessageListForm>
@@ -111,22 +124,25 @@ export default {
         .catch(error => {
           console.log('logout', error)
         })
-    fetch("/api/subscriptions")
-    .then(response => response.json())
-    .then(data => {
-      this.followingCount = data
-    })
-    .catch(error => {
-      console.log('subscriptions', error)
-    })
-    fetch("/api/subscribers")
-    .then(response => response.json())
-    .then(data => {
-      this.followersCount = data
-    })
-    .catch(error => {
-      console.log('subscribers', error)
-    })
+
+    if(this.profile != null) {
+      fetch("/api/subscriptions/" + this.profile.username)
+      .then(response => response.json())
+      .then(data => {
+        this.followingCount = data
+      })
+      .catch(error => {
+        console.log('subscriptions', error)
+      })
+      fetch("/api/subscribers/" + this.profile.username)
+      .then(response => response.json())
+      .then(data => {
+        this.followersCount = data
+      })
+      .catch(error => {
+        console.log('subscribers', error)
+      })
+    }
   },
   methods: {
     //sending request for logout to backend

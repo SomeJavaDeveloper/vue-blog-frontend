@@ -1,10 +1,10 @@
 <template>
 
   <input v-model="inputName" @change="updateList"/>
-  <p>Subscriptions</p>
-  <div v-if="subscriptions">
-    <div v-for="subscription in subscriptions" :key="subscription.id">
-      <p>{{ subscription.username }}</p>
+  <p>Subscribers</p>
+  <div v-if="subscribers">
+    <div v-for="subscriber in subscribers" :key="subscriber.id">
+      <p>{{ subscriber.username }}</p>
       <br>
     </div>
   </div>
@@ -22,24 +22,24 @@
 <script>
 
 export default {
-  name: "SubscriptionsPage",
+  name: "SubscribersPage",
   data() {
     return {
       users: [],
-      subscriptions: [],
+      subscribers: [],
       inputName: '',
       ifSearched: false
     }
   },
   mounted() {
     if(this.profile != null) {
-      fetch("/api/subscriptions/" + this.$route.params.username)
+      fetch("/api/subscribers/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
-        this.subscriptions = data
+        this.subscribers = data
       })
       .catch(error => {
-        console.log('subscriptions getting', error)
+        console.log('subscribers getting', error)
       })
       fetch("/api/users-except-current")
       .then(response => response.json())
@@ -54,13 +54,13 @@ export default {
   methods: {
     updateList() {
       if(this.profile != null) {
-        fetch("/api/subscriptions/" + this.$route.params.username + "/" + this.inputName)
+        fetch("/api/subscribers/" + this.$route.params.username + "/" + this.inputName)
         .then(response => response.json())
         .then(data => {
-          this.subscriptions = data
+          this.subscribers = data
         })
         .catch(error => {
-          console.log('subscriptions getting', error)
+          console.log('subscribers getting', error)
         })
       }
 
