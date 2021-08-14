@@ -21,7 +21,13 @@
             <h1>PROFILE NAME TODO</h1>
           </div>
           <div class="post_profile_nickname">
-            <h2>{{ message.user.username }}</h2>
+            <h2>
+            <router-link
+              :to="{ name: 'Profile', params: { username: message.user.username }}">
+              {{ message.user.username }}
+            </router-link>
+            </h2>
+<!--            <h2>{{ message.user.username }}</h2>-->
           </div>
           <div style="margin-left: 6px">
             {{ message.creationDate }}
@@ -78,11 +84,11 @@
           <div>
             <img style="width: 80px; height: 80px" src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
           </div>
-          <div class="new-post-popup-name-and-nick">
-            <h1>PROFILE NAME TODO</h1>
-            <h2 v-if="profile">{{ profile.username }}</h2>
-            <h2 v-else>No user (forbidden)</h2>
-          </div>
+<!--          <div class="new-post-popup-name-and-nick">-->
+<!--            <h1>PROFILE NAME TODO</h1>-->
+<!--            <h2 v-if="profile">{{ profile.username }}</h2>-->
+<!--            <h2 v-else>No user (forbidden)</h2>-->
+<!--          </div>-->
         </div>
         <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
           <div class="new-post-popup-text">

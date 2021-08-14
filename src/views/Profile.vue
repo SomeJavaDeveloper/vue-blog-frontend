@@ -10,17 +10,27 @@
         <picture>
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
         <h2 v-if="profile">
-          <router-link to="/user">{{ profile.username }}</router-link>
+          <router-link to="/user">{{ this.$route.params.username }}</router-link>
         </h2>
         <h2 v-else>No user</h2>
         <p>'Profession'</p>
       </div>
       <div class="main-container__following">
-        <h2>following:</h2>
+        <h2>
+          <router-link
+            :to="{ name: 'SubscriptionsPage', params: { username: this.$route.params.username }}">
+            following:
+          </router-link>
+        </h2>
         <h3>{{ followingCount.length }}</h3>
       </div>
       <div class="main-container__followers">
-        <h2>followers:</h2>
+        <h2>
+          <router-link
+            :to="{ name: 'SubscribersPage', params: { username: this.$route.params.username }}">
+            followers
+          </router-link>
+        </h2>
         <h3>{{ followersCount.length }}</h3>
       </div>
       <div class="main-container__exit-profile" v-if="profile" @click="logout">
@@ -67,7 +77,7 @@ export default {
     }
   },
   mounted() {
-    fetch("/api/subscriptions")
+    fetch("/api/subscriptions/" + this.$route.params.username)
     .then(response => response.json())
     .then(data => {
       this.followingCount = data
@@ -75,7 +85,7 @@ export default {
     .catch(error => {
       console.log('subscriptions', error)
     })
-    fetch("/api/subscribers")
+    fetch("/api/subscribers/" + this.$route.params.username)
     .then(response => response.json())
     .then(data => {
       this.followersCount = data
