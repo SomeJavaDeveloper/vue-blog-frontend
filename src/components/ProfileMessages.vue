@@ -53,9 +53,11 @@
         <!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
         <!--            #{{ tag.content }}-->
         <!--          </a>-->
-        <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">
+        <router-link
+          v-for="tag in message.tags" :key="tag"
+          :to="{ name: 'Tag', params: { tagContent: tag.content }}">
           #{{ tag.content }}
-        </a>
+        </router-link>
         <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
       </a>
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
@@ -153,8 +155,12 @@ export default {
   },
   methods: {
     fetchMessages() {
+<<<<<<< HEAD
       console.log(this.profile?.username)
       fetch("/api/message/user/" + this.profile?.username)
+=======
+      fetch("/api/message/user/" + this.$route.params.username)
+>>>>>>> 1e4a3141cbe40e76c0618702f48f6fd8402da4bd
       .then(response => response.json())
       .then(data => {
         this.messages = data
@@ -163,9 +169,6 @@ export default {
       .catch(error => {
         console.log('messages getting', error)
       })
-    },
-    openTag(tag) {
-      this.$router.push({ name: 'Tag', params: { tag: tag.content } })
     },
     unlike(id) {
       let res = this.messages.find(obj => {
