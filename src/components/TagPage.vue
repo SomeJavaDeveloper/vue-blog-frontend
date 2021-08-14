@@ -3,11 +3,25 @@
     <div class="main-container__new-post" v-show="profile">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       <h1 id="tagInHat">#{{ $route.params.tagContent }}</h1>
-      <a @click="subTag(tag)">
-        <button>
+      <a @click="subTag">
+<!--        subTag(tag)-->
+        <button v-if="!isUserSubbed">
           Subscribe
         </button>
+        <button v-else>
+          Unsubscribe
+        </button>
       </a>
+
+<!--      <h1 id="tagInHat">#{{ tag }}</h1>-->
+<!--      <a @click="subTag">-->
+<!--        <button v-if="!isUserSubbed">-->
+<!--          Subscribe-->
+<!--        </button>-->
+<!--        <button v-else>-->
+<!--          Unsubscribe-->
+<!--        </button>-->
+<!--      </a>-->
     </div>
     <div v-if="messages != null">
       <div v-for="message in messages" :key="message.id" :id="message.id + 1" class="main-container__post">
@@ -85,21 +99,27 @@ export default {
       profile: null,
       tag: null,
       tagObject: null,
-      messages: []
+      messages: [],
+      isUserSubbed: false
     }
   },
   mounted() {
+    this.fetchTagsAndMessages(this.$route.params.tagContent)
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
       this.profile = data
       this.$store.commit('updateProf', this.profile)
-      console.log('Current profile username:', this.profile?.username)
+      this.profile.subTags.forEach(tag => {
+        if (tag.content === this.tag)
+          this.isUserSubbed = true
+      })
+      console.log(this.isUserSubbed)
+      console.log('Current profile username:', this.profile)
     })
     .catch(error => {
       console.log('user getting error', error)
     })
-    this.fetchTagsAndMessages(this.$route.params.tagContent)
   },
   methods: {
     fetchTagsAndMessages(tagC) {
@@ -125,14 +145,14 @@ export default {
       })
     },
     subTag() {
-      fetch("/api/tags?tag=" + this.tag)
+      fetch("/api/tags?tag=" + this.tag.content)
       .then(response => response.json())
       .then(data => {
         console.log(data)
         this.profile = data
         this.isUserSubbed = false
         this.profile.subTags.forEach(tag => {
-          if (tag.content === this.tag)
+          if (tag.content === this.tag.content)
             this.isUserSubbed = true
         })
       })
