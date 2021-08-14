@@ -182,17 +182,6 @@ export default {
           })
       this.pageNumber++
     },
-    subTag(tag) {
-      fetch("/api/tags?tag=" + tag.content)
-          .then(response => response.json())
-          .then(data => {
-            console.log(data)
-          })
-          .catch(error => {
-            // something bad happened during the request
-            console.log(error)
-          })
-    },
     openTag(tag) {
       this.$router.push({ name: 'Tag', params: { tag: tag.content } })
     },

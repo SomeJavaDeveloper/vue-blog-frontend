@@ -3,13 +3,16 @@
     <div class="main-container__new-post" v-show="profile">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       <h1 id="tagInHat">#{{ tag }}</h1>
-      <a @click="subTag(tag)">
-        <button>
+      <a @click="subTag">
+        <button v-if="!isUserSubbed">
           Subscribe
+        </button>
+        <button v-else>
+          Unsubscribe
         </button>
       </a>
     </div>
-    <div v-for="message in messages" :key="message.id" :id="message.id + 1" class="main-container__post">
+    <div v-for="message in messages" :key="message.id" :id="message.id + '1'" class="main-container__post">
       <div class="post_name">
         <div class="post_logo">
           <picture>
@@ -78,7 +81,8 @@ export default {
       profile: null,
       tag: this.$route.params.tag,
       tagObject: null,
-      messages: []
+      messages: [],
+      isUserSubbed: false
     }
   },
   // computed: {
@@ -93,34 +97,47 @@ export default {
   // },
   mounted() {
     this.fetchMessages()
-
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
       this.profile = data
       this.$store.commit('updateProf', this.profile)
-      console.log('Current profile username:', this.profile?.username)
+      this.profile.subTags.forEach(tag => {
+        if (tag.content === this.tag)
+          this.isUserSubbed = true
+      })
+      console.log(this.isUserSubbed)
+      console.log('Current profile username:', this.profile)
     })
     .catch(error => {
       console.log('user getting error', error)
     })
+
+
   },
   methods: {
     fetchMessages() {
-      fetch("/api/tags/" + this.tag)
+      fetch("/api/tags/messages/" + this.tag)
       .then(response => response.json())
       .then(data => {
         this.messages = data
+        console.log(data)
       })
       .catch(error => {
         console.log('messages getting', error)
       })
     },
-    subTag(tag) {
-      fetch("/api/tags?tag=" + tag.content)
+    subTag() {
+      fetch("/api/tags?tag=" + this.tag)
       .then(response => response.json())
       .then(data => {
         console.log(data)
+        this.profile = data
+        this.isUserSubbed = false
+        this.profile.subTags.forEach(tag => {
+          if (tag.content === this.tag)
+            this.isUserSubbed = true
+        })
       })
       .catch(error => {
         // something bad happened during the request

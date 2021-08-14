@@ -121,7 +121,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'MessageListForm',
+  name: 'ProfileMessages',
   data() {
     return {
       body: '',
@@ -137,12 +137,13 @@ export default {
   mounted() {
     this.pageNumber = 0
     this.messages = []
-    this.fetchMessages()
 
     fetch("/api/user")
     .then(response => response.json())
     .then(data => {
       this.profile = data
+      if (this.profile !== null)
+        this.fetchMessages()
       this.$store.commit('updateProf', this.profile)
       console.log('Current profile username:', this.profile?.username)
     })
@@ -152,6 +153,7 @@ export default {
   },
   methods: {
     fetchMessages() {
+      console.log(this.profile?.username)
       fetch("/api/message/user/" + this.profile?.username)
       .then(response => response.json())
       .then(data => {
