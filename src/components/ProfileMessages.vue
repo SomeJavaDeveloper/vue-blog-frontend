@@ -128,7 +128,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'MessageListForm',
+  name: 'ProfileMessages',
   data() {
     return {
       body: '',
@@ -154,23 +154,23 @@ export default {
   mounted() {
     this.pageNumber = 0
     this.messages = []
-    this.fetchMessages()
-
-
-    // fetch("/api/user")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.profile = data
-    //   this.$store.commit('updateProf', this.profile)
-    //   console.log('Current profile username:', this.profile?.username)
-    // })
-    // .catch(error => {
-    //   console.log('user getting error', error)
-    // })
+    fetch("/api/user")
+    .then(response => response.json())
+    .then(data => {
+      this.profile = data
+      if (this.profile !== null)
+        this.fetchMessages()
+      this.$store.commit('updateProf', this.profile)
+      console.log('Current profile username:', this.profile?.username)
+    })
+    .catch(error => {
+      console.log('user getting error', error)
+    })
   },
   methods: {
     fetchMessages() {
-      fetch("/api/message/user/" + this.$route.params.username)
+      console.log(this.profile?.username)
+      fetch("/api/message/user/" + this.profile?.username)
       .then(response => response.json())
       .then(data => {
         this.messages = data
