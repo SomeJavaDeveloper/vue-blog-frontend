@@ -93,6 +93,7 @@ export default {
     .catch(error => {
       console.log('subscribers', error)
     })
+    console.log(this.profile.username + ' PROFILE')
   },
   methods: {
     //sending request for logout to backend

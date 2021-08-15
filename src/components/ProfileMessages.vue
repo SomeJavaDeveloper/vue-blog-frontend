@@ -80,11 +80,11 @@
           <div>
             <img style="width: 80px; height: 80px" src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
           </div>
-<!--          <div class="new-post-popup-name-and-nick">-->
-<!--            <h1>PROFILE NAME TODO</h1>-->
-<!--            <h2 v-if="profile">{{ this.$route.params.username }}</h2>-->
-<!--            <h2 v-else>No user (forbidden)</h2>-->
-<!--          </div>-->
+          <!--          <div class="new-post-popup-name-and-nick">-->
+          <!--            <h1>PROFILE NAME TODO</h1>-->
+          <!--            <h2 v-if="profile">{{ this.$route.params.username }}</h2>-->
+          <!--            <h2 v-else>No user (forbidden)</h2>-->
+          <!--          </div>-->
         </div>
         <form @submit.prevent="handleForm" ref="uploadForm" v-show="profile">
           <div class="new-post-popup-text">
@@ -126,9 +126,8 @@
 
 <script>
 import axios from 'axios';
-
 export default {
-  name: 'ProfileMessages',
+  name: 'MessageListForm',
   data() {
     return {
       body: '',
@@ -154,23 +153,21 @@ export default {
   mounted() {
     this.pageNumber = 0
     this.messages = []
-    fetch("/api/user")
-    .then(response => response.json())
-    .then(data => {
-      this.profile = data
-      if (this.profile !== null)
-        this.fetchMessages()
-      this.$store.commit('updateProf', this.profile)
-      console.log('Current profile username:', this.profile?.username)
-    })
-    .catch(error => {
-      console.log('user getting error', error)
-    })
+    this.fetchMessages()
+    // fetch("/api/user")
+    // .then(response => response.json())
+    // .then(data => {
+    //   this.profile = data
+    //   this.$store.commit('updateProf', this.profile)
+    //   console.log('Current profile username:', this.profile?.username)
+    // })
+    // .catch(error => {
+    //   console.log('user getting error', error)
+    // })
   },
   methods: {
     fetchMessages() {
-      console.log(this.profile?.username)
-      fetch("/api/message/user/" + this.profile?.username)
+      fetch("/api/message/user/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
         this.messages = data
@@ -233,12 +230,10 @@ export default {
         photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
       };
       console.log(message)
-
       const json = JSON.stringify(message);
       const blobJson = new Blob([json], {
         type: 'application/json'
       });
-
       const file = this.$refs.uploadImage.files[0];
       const blobData = new Blob([file], {
         type: 'multipart/form-data'
@@ -251,7 +246,6 @@ export default {
         data.append("file", new Blob([], {
           type: 'multipart/form-data'
         }));
-
       axios({
         method: 'post',
         url: '/api/message/add',
@@ -273,18 +267,15 @@ export default {
         if (!document.cookie) {
           return null;
         }
-
         const xsrfCookies = document.cookie.split(';')
         .map(c => c.trim())
         .filter(c => c.startsWith(name + '='));
-
         if (xsrfCookies.length === 0) {
           return null;
         }
         return decodeURIComponent(xsrfCookies[0].split('=')[1]);
       }
       const csrfToken = getCookie('XSRF-TOKEN')
-
       fetch("/api/message/" + message.id, {
         method: 'DELETE',
         headers: {
@@ -305,5 +296,4 @@ export default {
 </script>
 
 <style>
-
 </style>
