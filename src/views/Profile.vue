@@ -9,10 +9,9 @@
       <div class="main-container__name">
         <picture>
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
-        <h2 v-if="profile">
-          <router-link to="/user">{{ this.$route.params.username }}</router-link>
+        <h2>
+          <router-link :to="{ name: 'Profile', params: { username: this.$route.params.username }}">{{ this.$route.params.username }}</router-link>
         </h2>
-        <h2 v-else>No user</h2>
         <p>'Profession'</p>
       </div>
       <div class="main-container__following">
@@ -93,7 +92,7 @@ export default {
     .catch(error => {
       console.log('subscribers', error)
     })
-    console.log(this.profile.username + ' PROFILE')
+    console.log(this.$route.params.username + ' PROFILE')
   },
   methods: {
     //sending request for logout to backend

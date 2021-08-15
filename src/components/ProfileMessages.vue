@@ -167,11 +167,12 @@ export default {
   },
   methods: {
     fetchMessages() {
+      console.log(this.$route.params.username)
       fetch("/api/message/user/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
         this.messages = data
-        console.log(this.profile)
+        console.log(this.messages)
       })
       .catch(error => {
         console.log('messages getting', error)

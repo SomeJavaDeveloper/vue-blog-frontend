@@ -29,7 +29,7 @@
           <i class="fas fa-bell"></i>
           <p>notifications</p>
         </div>
-        <router-link v-if="!profile" to="login" class="home">
+        <router-link v-if="!profile" to="/login" class="home">
           <i class="fas fa-door-closed"></i>
           <p>Login</p>
         </router-link>
