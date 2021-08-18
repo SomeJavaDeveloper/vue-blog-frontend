@@ -32,7 +32,7 @@ export default {
     }
   },
   mounted() {
-    fetch("/api/subscribers/" + this.$route.params.username)
+    fetch("/api/subscribers/" + this.$route.params.username  + "?inputPattern=")
     .then(response => response.json())
     .then(data => {
       this.subscribers = data
@@ -40,18 +40,18 @@ export default {
     .catch(error => {
       console.log('subscribers getting', error)
     })
-    fetch("/api/users-except-current")
-    .then(response => response.json())
-    .then(data => {
-      this.users = data
-    })
-    .catch(error => {
-      console.log('users getting', error)
-    })
+    // fetch("/api/users-other-subscribers")
+    // .then(response => response.json())
+    // .then(data => {
+    //   this.users = data
+    // })
+    // .catch(error => {
+    //   console.log('users getting', error)
+    // })
   },
   methods: {
     updateList() {
-      fetch("/api/subscribers/" + this.$route.params.username + "/" + this.inputName)
+      fetch("/api/subscribers/" + this.$route.params.username + "?inputPattern=" + this.inputName)
       .then(response => response.json())
       .then(data => {
         this.subscribers = data
@@ -60,7 +60,7 @@ export default {
         console.log('subscribers getting', error)
       })
 
-      fetch("/api/users-except-current/" + this.inputName)
+      fetch("/api/users-other-subscribers?inputPattern=" + this.inputName)
       .then(response => response.json())
       .then(data => {
         this.users = data
