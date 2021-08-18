@@ -7,7 +7,7 @@ import MainPage from "../views/MainPage";
 import LoginPage from "../views/LoginPage";
 import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
-import SubscribersPage from "../views/SubscriptionsPage";
+import SubscribersPage from "../views/SubscribersPage";
 import UsersPage from "../views/UsersPage";
 
 

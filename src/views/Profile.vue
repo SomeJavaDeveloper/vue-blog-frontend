@@ -32,12 +32,30 @@
         </h2>
         <h3>{{ followersCount.length }}</h3>
       </div>
-      <div class="main-container__exit-profile" v-if="profile" @click="logout">
+
+      <div class="main-container__exit-profile"
+           v-if="profile.username === this.$route.params.username" @click="logout">
         <h1>Logout</h1>
       </div>
-      <router-link to="/login" v-else class="main-container__exit-profile">
-        <h1>Login</h1>
-      </router-link>
+      <div class="main-container__exit-profile" v-else>
+        <a @click="subUser">
+          <!--        subTag(tag)-->
+          <button v-if="!isUserSubbed">
+            Subscribe
+          </button>
+          <button v-else>
+            Unsubscribe
+          </button>
+        </a>
+      </div>
+<!--      <router-link to="/login" v-else-if="isUserSubbed" class="main-container__exit-profile">-->
+<!--        <h1>Login</h1>-->
+<!--      </router-link>-->
+<!--      <router-link to="/login" v-else class="main-container__exit-profile">-->
+<!--        <h1>Login</h1>-->
+<!--      </router-link>-->
+
+
     </div>
 
     <ProfileMessages></ProfileMessages>
@@ -62,7 +80,8 @@ export default {
       route: useRoute(),
       path: computed(() =>this.route.path),
       followingCount: [],
-      followersCount: []
+      followersCount: [],
+      isUserSubbed: false
     }
   },
   computed: {
@@ -88,6 +107,10 @@ export default {
     .then(response => response.json())
     .then(data => {
       this.followersCount = data
+      data.forEach(user => {
+        if (user.username === this.profile.username)
+          this.isUserSubbed = true
+      })
     })
     .catch(error => {
       console.log('subscribers', error)
@@ -117,6 +140,23 @@ export default {
     },
     openTagMain(tag) {
       this.$router.push({ name: 'Tag', params: { tag: tag.content } })
+    },
+    subUser() {
+      fetch("/api/subscribe?username=" + this.$route.params.username)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        this.profile = data
+        this.isUserSubbed = false
+        this.profile.subscriptions.forEach(user => {
+          if (user.username === this.$route.params.username)
+            this.isUserSubbed = true
+        })
+      })
+      .catch(error => {
+// something bad happened during the request
+        console.log(error)
+      })
     },
   }
 }

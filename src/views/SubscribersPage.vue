@@ -32,8 +32,26 @@ export default {
     }
   },
   mounted() {
-    if(this.profile != null) {
-      fetch("/api/subscribers/" + this.$route.params.username)
+    fetch("/api/subscribers/" + this.$route.params.username)
+    .then(response => response.json())
+    .then(data => {
+      this.subscribers = data
+    })
+    .catch(error => {
+      console.log('subscribers getting', error)
+    })
+    fetch("/api/users-except-current")
+    .then(response => response.json())
+    .then(data => {
+      this.users = data
+    })
+    .catch(error => {
+      console.log('users getting', error)
+    })
+  },
+  methods: {
+    updateList() {
+      fetch("/api/subscribers/" + this.$route.params.username + "/" + this.inputName)
       .then(response => response.json())
       .then(data => {
         this.subscribers = data
@@ -41,28 +59,6 @@ export default {
       .catch(error => {
         console.log('subscribers getting', error)
       })
-      fetch("/api/users-except-current")
-      .then(response => response.json())
-      .then(data => {
-        this.users = data
-      })
-      .catch(error => {
-        console.log('users getting', error)
-      })
-    }
-  },
-  methods: {
-    updateList() {
-      if(this.profile != null) {
-        fetch("/api/subscribers/" + this.$route.params.username + "/" + this.inputName)
-        .then(response => response.json())
-        .then(data => {
-          this.subscribers = data
-        })
-        .catch(error => {
-          console.log('subscribers getting', error)
-        })
-      }
 
       fetch("/api/users-except-current/" + this.inputName)
       .then(response => response.json())
