@@ -74,7 +74,7 @@
           <router-link
             v-for="tag in message.tags" :key="tag"
             :to="{ name: 'Tag', params: { tagContent: tag.content }}"
-            @click="fetchTagsAndMessages(tag.content)">
+            @click="initialize">
             #{{ tag.content }}
           </router-link>
           <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
@@ -104,24 +104,27 @@ export default {
     }
   },
   mounted() {
-    this.fetchTagsAndMessages(this.$route.params.tagContent)
-    fetch("/api/user")
-    .then(response => response.json())
-    .then(data => {
-      this.profile = data
-      this.$store.commit('updateProf', this.profile)
-      this.profile.subTags.forEach(tag => {
-        if (tag.content === this.tag)
-          this.isUserSubbed = true
-      })
-      console.log(this.isUserSubbed)
-      console.log('Current profile username:', this.profile)
-    })
-    .catch(error => {
-      console.log('user getting error', error)
-    })
+    this.initialize()
   },
   methods: {
+    initialize() {
+      this.fetchTagsAndMessages(this.$route.params.tagContent)
+      fetch("/api/user")
+          .then(response => response.json())
+          .then(data => {
+            this.profile = data
+            this.$store.commit('updateProf', this.profile)
+            this.isUserSubbed = false
+            this.profile.subTags.forEach(tag => {
+              if (tag.content === this.$route.params.tagContent)
+                this.isUserSubbed = true
+            })
+            console.log('Current profile username:', this.profile)
+          })
+          .catch(error => {
+            console.log('user getting error', error)
+          })
+    },
     fetchTagsAndMessages(tagC) {
       fetch("/api/tags/" + this.$route.params.tagContent)
       .then(response => response.json())
@@ -145,14 +148,14 @@ export default {
       })
     },
     subTag() {
-      fetch("/api/tags?tag=" + this.tag.content)
+      fetch("/api/tags?tag=" + this.$route.params.tagContent)
       .then(response => response.json())
       .then(data => {
         console.log(data)
         this.profile = data
         this.isUserSubbed = false
         this.profile.subTags.forEach(tag => {
-          if (tag.content === this.tag.content)
+          if (tag.content === this.$route.params.tagContent)
             this.isUserSubbed = true
         })
       })
