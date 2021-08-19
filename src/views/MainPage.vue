@@ -126,7 +126,7 @@ export default {
         })
 
     if(this.profile != null) {
-      fetch("/api/subscriptions/" + this.profile.username)
+      fetch("/api/subscriptions/" + this.profile.username + "?inputPattern=")
       .then(response => response.json())
       .then(data => {
         this.followingCount = data
@@ -134,7 +134,7 @@ export default {
       .catch(error => {
         console.log('subscriptions', error)
       })
-      fetch("/api/subscribers/" + this.profile.username)
+      fetch("/api/subscribers/" + this.profile.username + "?inputPattern=")
       .then(response => response.json())
       .then(data => {
         this.followersCount = data

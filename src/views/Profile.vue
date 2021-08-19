@@ -95,30 +95,33 @@ export default {
     }
   },
   mounted() {
-    fetch("/api/subscriptions/" + this.$route.params.username)
-    .then(response => response.json())
-    .then(data => {
-      this.followingCount = data
-    })
-    .catch(error => {
-      console.log('subscriptions', error)
-    })
-    fetch("/api/subscribers/" + this.$route.params.username)
-    .then(response => response.json())
-    .then(data => {
-      this.followersCount = data
-      data.forEach(user => {
-        if (user.username === this.profile.username)
-          this.isUserSubbed = true
-      })
-    })
-    .catch(error => {
-      console.log('subscribers', error)
-    })
+    this.initializeSubs()
     console.log(this.$route.params.username + ' PROFILE')
   },
   methods: {
     //sending request for logout to backend
+    initializeSubs() {
+      fetch("/api/subscriptions/" + this.$route.params.username + "?inputPattern=")
+      .then(response => response.json())
+      .then(data => {
+        this.followingCount = data
+      })
+      .catch(error => {
+        console.log('subscriptions', error)
+      })
+      fetch("/api/subscribers/" + this.$route.params.username + "?inputPattern=")
+      .then(response => response.json())
+      .then(data => {
+        this.followersCount = data
+        data.forEach(user => {
+          if (user.username === this.profile.username)
+            this.isUserSubbed = true
+        })
+      })
+      .catch(error => {
+        console.log('subscribers', error)
+      })
+    },
     logout() {
       fetch("/api/logout", {
         method: 'GET',
@@ -157,6 +160,7 @@ export default {
 // something bad happened during the request
         console.log(error)
       })
+      this.initializeSubs()
     },
   }
 }
