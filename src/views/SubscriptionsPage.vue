@@ -9,14 +9,6 @@
     </div>
   </div>
 
-  <div v-if="ifSearched">
-    <hr>
-    <p>Other users</p>
-    <div v-for="user in users" :key="user.id">
-      <p>{{ user.username }}</p>
-      <br>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -25,10 +17,8 @@ export default {
   name: "SubscriptionsPage",
   data() {
     return {
-      users: [],
       subscriptions: [],
-      inputName: '',
-      ifSearched: false
+      inputName: ''
     }
   },
   mounted() {
@@ -40,14 +30,6 @@ export default {
     .catch(error => {
       console.log('subscriptions getting', error)
     })
-    // fetch("/api/users-other-subscriptions")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.users = data
-    // })
-    // .catch(error => {
-    //   console.log('users getting', error)
-    // })
   },
   methods: {
     updateList() {
@@ -59,16 +41,6 @@ export default {
       .catch(error => {
         console.log('subscriptions getting', error)
       })
-
-      fetch("/api/users-other-subscriptions?inputPattern=" + this.inputName)
-      .then(response => response.json())
-      .then(data => {
-        this.users = data
-      })
-      .catch(error => {
-        console.log('users getting', error)
-      })
-      this.ifSearched = this.inputName !== '';
     }
   }
 }

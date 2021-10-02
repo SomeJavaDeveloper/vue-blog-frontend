@@ -68,6 +68,7 @@ export default {
               console.log('Wrong password')
             }
             if (status === 200)
+
               this.$router.push({name: 'Main'})
           })
           .catch(error => {

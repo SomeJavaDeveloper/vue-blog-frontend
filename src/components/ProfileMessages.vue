@@ -18,15 +18,10 @@
             <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
         </div>
         <div class="post_profile_name">
-          <h1>PROFILE NAME TODO</h1>
-        </div>
-        <div class="post_profile_nickname">
-          <h2>
-            <router-link
-              :to="{ name: 'Profile', params: { username: message.user.username }}">
-              {{ message.user.username }}
-            </router-link>
-          </h2>
+          <router-link
+            :to="{ name: 'Profile', params: { username: message.user.username }}">
+            <h1>{{ message.user.username }}</h1>
+          </router-link>
         </div>
         <div style="margin-left: 6px">
           {{ message.creationDate }}

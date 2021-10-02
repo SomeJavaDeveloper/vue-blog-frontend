@@ -2,9 +2,9 @@
   <header class="header">
     <div class="header-container">
       <div class="header-container__logo-and-search">
-        <router-link to="/">
+        <a href="/">
           <img src="https://storage.googleapis.com/vueblog-files-bucket/logo.png" alt=""/>
-        </router-link>
+        </a>
         <input type="search" maxlength="25" v-model="toFindText" size="10" placeholder="search..."/>
         <button @click="find"><i class="fas fa-search"></i></button>
         <a style="font-size: 16pt; margin-left: 10px">Find By Tag</a>

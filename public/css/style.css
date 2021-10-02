@@ -12616,6 +12616,24 @@ html body {
   height: 100px;
 }
 
+.username-input {
+  margin: 0 auto;
+  font-size: 16pt;
+  border-radius: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: white;
+  height: 70px;
+  width: 573px;
+}
+
 .main-container__center-container .main-container__new-post {
   border-radius: 30px;
   display: -webkit-box;
@@ -12643,7 +12661,7 @@ html body {
 .main-container__center-container .main-container__new-post button {
   text-decoration: none;
   cursor: pointer;
-  margin-right: 20px;
+  margin-left: 370px;
   background-color: #88c0d0;
   padding: 15px;
   font-size: 16pt;
@@ -12663,6 +12681,79 @@ html body {
   -ms-transform: scale(0.9);
   transform: scale(0.9);
 }
+
+
+.user-container__user-box {
+
+  font-size: 16pt;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 70px;
+  width: 573px;
+
+
+  margin: 20px auto 0;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  border-radius: 20px;
+  background-color: #4c566a;
+}
+
+.user-container__user-box .post_logo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 5px;
+  padding: 0;
+}
+
+.user-container__user-box .post_name {
+  height: 70px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.user-container__user-box .post_name h1 {
+  margin: 0 10px;
+  font-weight: 600;
+  font-size: 16pt;
+}
+
+.user-container__user-box .post_name h2 {
+  color: white;
+}
+
+.user-container__user-box .post_text p {
+  font-size: 14pt;
+  margin-left: 75px;
+  margin-top: -19px;
+}
+
+.user-container__user-box .post_tags a {
+  font-size: 14pt;
+  margin-left: 10px;
+}
+
+.user-container__user-box img {
+  max-height: 300px;
+  border-radius: 50px;
+  padding: 20px 20px 20px 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
 
 .main-container__center-container .main-container__post {
   margin-top: 20px;
@@ -12695,6 +12786,7 @@ html body {
 .main-container__center-container .main-container__post .post_name h1 {
   margin: 0 10px;
   font-weight: 600;
+  font-size: 14pt;
 }
 
 .main-container__center-container .main-container__post .post_name h2 {
