@@ -12661,7 +12661,7 @@ html body {
 .main-container__center-container .main-container__new-post button {
   text-decoration: none;
   cursor: pointer;
-  margin-left: 370px;
+  margin-right: 20px;
   background-color: #88c0d0;
   padding: 15px;
   font-size: 16pt;

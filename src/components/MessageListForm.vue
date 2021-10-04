@@ -20,7 +20,7 @@
           <div class="post_profile_name">
             <router-link
               :to="{ name: 'Profile', params: { username: message.user.username }}">
-              <h1>{{ message.user.username }}</h1>
+              <h1>{{ message.username }}</h1>
             </router-link>
           </div>
           <div style="margin-left: 6px">
@@ -178,7 +178,7 @@ export default {
               console.log("That's all messages!") // todo Alert of insufficient messages
             console.log(data)
             this.messages = this.messages.concat(data.filter(item =>
-                !JSON.stringify(this.messages).includes(JSON.stringify(item))
+              !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
             ))
             this.$store.state.messages = this.messages
           })

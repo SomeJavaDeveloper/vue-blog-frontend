@@ -70,7 +70,7 @@ export default {
     },
     methods: {
       updateList() {
-        fetch("/api/users-except-current/")
+        fetch("/api/users/" + this.inputName)
         .then(response => response.json())
         .then(data => {
           this.users = data
