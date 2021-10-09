@@ -51,37 +51,10 @@
       <MessageListForm></MessageListForm>
     </div>
     <div v-else>
-<!--         -if="this.path.toString() === '/tag'"-->
       <TagPage></TagPage>
     </div>
 
-    <div class="main-container__right-container">
-      <div class="trending">
-        <h1>Trending now</h1>
-      </div>
-
-      <router-link
-        v-for="tag in tags.slice(0, 5)" :key="tag"
-        :to="{ name: 'Tag', params: { tagContent: tag.content }}">
-        <div class="trend">
-          <h1>#{{ tag.content }}</h1>
-          <h3>{{ tag.subscribers.length }} followers</h3>
-        </div>
-      </router-link>
-
-<!--      <a @click="openTagMain(tag)" href="#" v-for="tag in tag s.slice(0, 5)" :key="tag.id">-->
-<!--        <div class="trend">-->
-<!--          <h1>#{{ tag.content }}</h1>-->
-<!--          <h3>{{ tag.numberOfMessages }} followers</h3>-->
-<!--        </div>-->
-<!--      </a>-->
-      <div class="show-more">
-        <a href="">
-          <h1>show more (todo)</h1>
-        </a>
-      </div>
-    </div>
-
+    <TagBox></TagBox>
 
   </div>
 </template>
@@ -92,9 +65,10 @@ import {useRoute} from 'vue-router';
 import {computed} from 'vue';
 import MessageListForm from "../components/MessageListForm";
 import TagPage from "../components/TagPage";
+import TagBox from "../components/TagBox";
 
 export default {
-  components: {TagPage, MessageListForm },
+  components: {TagPage, MessageListForm, TagBox },
   name: 'MainPage',
   data() {
     return {
@@ -126,17 +100,17 @@ export default {
     //   return this.message.split('').reverse().join('')
     // }
   },
-  mounted() {
-    fetch("/api/tags/popular")
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      this.tags = data
-    })
-    .catch(error => {
-      console.log('logout', error)
-    })
-  },
+  // mounted() {
+  //   fetch("/api/tags/popular")
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log(data)
+  //     this.tags = data
+  //   })
+  //   .catch(error => {
+  //     console.log('logout', error)
+  //   })
+  // },
   methods: {
     //sending request for logout to backend
     logout() {

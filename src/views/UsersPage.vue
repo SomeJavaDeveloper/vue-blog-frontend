@@ -10,16 +10,15 @@
           <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       </div>
       <div>
-        <router-link v-if="user == profile.id"
-          :to="{ name: 'Profile', params: {
-            username: profile.username
-          }}">
-          <h1>
-            {{ profile.username }}
-          </h1>
-        </router-link>
-        <router-link v-else
-                     :to="{ name: 'Profile', params: {
+<!--        <router-link v-if="user == profile.id"-->
+<!--          :to="{ name: 'Profile', params: {-->
+<!--            username: profile.username-->
+<!--          }}">-->
+<!--          <h1>-->
+<!--            {{ profile.username }}-->
+<!--          </h1>-->
+<!--        </router-link>-->
+        <router-link :to="{ name: 'Profile', params: {
             username: user.username
           }}">
           <h1>{{ user.username }}</h1>
@@ -44,7 +43,10 @@ export default {
   data() {
     return {
       users: [],
-      inputName: ''
+      inputName: '',
+      isUsersPage: false,
+      isSubscriptionsPage: false,
+      isSubscribersPage: false
     }
   },
   computed: {

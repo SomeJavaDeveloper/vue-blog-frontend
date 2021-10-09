@@ -13,10 +13,12 @@
       <div class="header-container__right-menu">
         <!--        ONLY FOR BEAUTY NOW -->
 <!--        ///////////////-->
-        <router-link to="/users" class="users">
-          <i class="fas fa-users"></i>
-          <p>Users</p>
-        </router-link>
+        <div class="messages">
+          <router-link to="/users" class="users">
+            <i class="fas fa-users"></i>
+            <p>Users</p>
+          </router-link>
+        </div>
 <!--        <router-link to="/subscriptions" class="subscriptions">-->
 <!--          <i class="fas fa-user-friends"></i>-->
 <!--          <p>subscriptions</p>-->

@@ -1,11 +1,22 @@
 <template>
 
-  <input v-model="inputName" @change="updateList"/>
-  <p>Subscribers</p>
-  <div v-if="subscribers">
-    <div v-for="subscriber in subscribers" :key="subscriber.id">
-      <p>{{ subscriber.username }}</p>
-      <br>
+  <input v-model="inputName" @change="updateList" class="username-input"/>
+
+  <div v-for="subscriber in subscribers" :key="subscriber.id" class="user-container__user-box">
+    <div class="post_name">
+      <div class="post_logo">
+        <picture>
+          <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+      </div>
+      <div>
+        <router-link :to="{ name: 'Profile', params: {
+            username: subscriber.username
+          }}">
+          <h1>
+            {{ subscriber.username }}
+          </h1>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -18,6 +29,16 @@ export default {
     return {
       subscribers: [],
       inputName: ''
+    }
+  },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
     }
   },
   mounted() {
