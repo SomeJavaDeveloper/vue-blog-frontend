@@ -9,6 +9,7 @@ import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
 import SubscribersPage from "../views/SubscribersPage";
 import UsersPage from "../views/UsersPage";
+import TagPage from "../views/TagPage";
 
 
 const routes = [
@@ -20,7 +21,7 @@ const routes = [
   {
     path: '/tag/:tagContent',
     name: 'Tag',
-    component: MainPage
+    component: TagPage
   },
   {
     path: '/user/:username',

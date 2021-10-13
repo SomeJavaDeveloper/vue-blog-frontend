@@ -27,7 +27,7 @@
             {{ message.creationDate }}
           </div>
 <!--          TODO: УБРАТЬ ПОСЛЕДНЕЕ СРАВНЕНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-          <div style="margin-left: 6px" v-if="profile && (profile.id === message.user.id || profile.id === message.user)">
+          <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
@@ -64,7 +64,7 @@
               </router-link>
 <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
         </a>
-      <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;" class="share">
+      <h1 v-if="profile" style="margin-left: 30px;" class="share">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
         <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>

@@ -170,16 +170,10 @@ export default {
       fetch("/api/subscribe?username=" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         this.profile = data
-        this.isUserSubbed = false
-        this.profile.subscriptions.forEach(user => {
-          if (user.username === this.$route.params.username)
-            this.isUserSubbed = true
-        })
+        this.isUserSubbed = !this.isUserSubbed;
       })
       .catch(error => {
-// something bad happened during the request
         console.log(error)
       })
       this.initialize()
