@@ -19,7 +19,7 @@
           </div>
           <div class="post_profile_name">
             <router-link
-              :to="{ name: 'Profile', params: { username: message.user.username }}">
+              :to="{ name: 'Profile', params: { username: message.username }}">
               <h1>{{ message.username }}</h1>
             </router-link>
           </div>
@@ -27,7 +27,7 @@
             {{ message.creationDate }}
           </div>
 <!--          TODO: УБРАТЬ ПОСЛЕДНЕЕ СРАВНЕНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-          <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
+          <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
@@ -58,9 +58,9 @@
 <!--            #{{ tag.content }}-->
 <!--          </a>-->
               <router-link
-              v-for="tag in message.tags" :key="tag"
-              :to="{ name: 'Tag', params: { tagContent: tag.content }}">
-                #{{ tag.content }}
+              v-for="tag in message.tagsContent" :key="tag"
+              :to="{ name: 'Tag', params: { tagContent: tag }}">
+                #{{ tag }}
               </router-link>
 <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
         </a>
@@ -182,6 +182,7 @@ export default {
               !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
             ))
             this.$store.state.messages = this.messages
+            console.log(this.messages)
           })
           .catch(error => {
             console.log('messages getting', error)
@@ -241,13 +242,18 @@ export default {
       const message = {
         body: this.body,
         creationDate: null,
+        //////////////////////////////////
         tags: this.tags,
         photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
       };
       console.log(message)
 
-      const json = JSON.stringify(message);
-      const blobJson = new Blob([json], {
+      const jsonMessage = JSON.stringify(message);
+      const jsonTags = JSON.stringify(this.tags);
+      const blobJsonMessage = new Blob([jsonMessage], {
+        type: 'application/json'
+      });
+      const blobJsonTags = new Blob([jsonTags], {
         type: 'application/json'
       });
 
@@ -256,7 +262,8 @@ export default {
         type: 'multipart/form-data'
       });
       const data = new FormData();
-      data.append("text", blobJson);
+      data.append("text", blobJsonMessage);
+      data.append("tags", blobJsonTags);
       if (file)
         data.append("file", blobData);
       else

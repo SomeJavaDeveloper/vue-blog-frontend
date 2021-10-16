@@ -19,14 +19,14 @@
         </div>
         <div class="post_profile_name">
           <router-link
-            :to="{ name: 'Profile', params: { username: message.user.username }}">
-            <h1>{{ message.user.username }}</h1>
+            :to="{ name: 'Profile', params: { username: message.username }}">
+            <h1>{{ message.username }}</h1>
           </router-link>
         </div>
         <div style="margin-left: 6px">
           {{ message.creationDate }}
         </div>
-        <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
+        <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
           <i @click="deleteMessage(message)" class="fas fa-trash"></i>
         </div>
       </div>
@@ -54,9 +54,9 @@
         <!--            #{{ tag.content }}-->
         <!--          </a>-->
         <router-link
-          v-for="tag in message.tags" :key="tag"
-          :to="{ name: 'Tag', params: { tagContent: tag.content }}">
-          #{{ tag.content }}
+          v-for="tag in message.tagsContent" :key="tag"
+          :to="{ name: 'Tag', params: { tagContent: tag }}">
+          #{{ tag }}
         </router-link>
         <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
       </a>
