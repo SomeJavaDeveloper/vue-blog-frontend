@@ -225,13 +225,17 @@ export default {
     },
     onFileChange(e) {
       const file = e.target.files[0];
-      this.url = URL.createObjectURL(file);
+
+      if(file.size < 52428800){
+        this.url = URL.createObjectURL(file);
+      }
     },
     // tag processing of message (only for vue)
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
         this.tempTag = this.tempTag.substr(0, this.tempTag.length - 1)
-        if (!this.tags.includes(this.tempTag) && this.tempTag.indexOf(' ') === -1) {
+        if (!this.tags.includes(this.tempTag) && this.tempTag.indexOf(' ') === -1
+          && /^[a-zA-Z0-9]{1,16}$/.test(this.tempTag)) {
           this.tags.push(this.tempTag)
         }
         this.tempTag = ''
@@ -321,7 +325,7 @@ export default {
     }
   }
 }
-</script>
+<img src="../../public/favicon.ico"/></script>
 
 <style>
 

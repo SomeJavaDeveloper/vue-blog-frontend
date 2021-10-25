@@ -127,9 +127,7 @@ export default {
       fetch("/api/subscribers-count/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
-        console.log(this.subscribersCount)
         this.subscribersCount = data
-        console.log(this.subscribersCount)
       })
       .catch(error => {
         console.log('subscribers', error)

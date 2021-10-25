@@ -73,14 +73,13 @@
     </div>
 
 
-    <div class="main-container__right-container">
+    <div class="main-container__right-container" v-if="tags !== undefined" >
       <div class="trending">
         <h1>Trending now</h1>
       </div>
 
-<!--      .slice(0, 5)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
       <router-link @click="openTag(tag)"
-        v-for="tag in tags" :key="tag"
+        v-for="tag in tags.slice(0, 5)" :key="tag"
         :to="{ name: 'Tag', params: { tagContent: tag.content }}">
         <div class="trend">
           <h1>#{{ tag.content }}</h1>
@@ -103,6 +102,7 @@ export default {
       profile: null,
       tag: null,
       tagObject: null,
+      tags: [],
       messages: [],
       isUserSubbed: false
     }
@@ -125,15 +125,12 @@ export default {
           .then(response => response.json())
           .then(data => {
             this.profile = data
-            console.log(this.profile)
             this.$store.commit('updateProf', this.profile)
             this.isUserSubbed = false
             this.tags.forEach(tag => {
               this.profile.subTags.forEach(userTag => {
                 if (tag.id === userTag && tag.content === this.$route.params.tagContent)
                   this.isUserSubbed = true
-                console.log('fffffffffffffffffffffffffffffffffffff')
-                console.log(tag.id + ' ' + userTag)
               })
             })
           })

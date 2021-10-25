@@ -122,7 +122,7 @@ export default {
       this.url = URL.createObjectURL(file);
     },
     validateUsername() {
-      if(/^[a-zA-Z0-9]{5,}$/.test(this.username)) {
+      if(/^[a-zA-Z0-9]{5,18}$/.test(this.username)) {
         this.isUsernameValid = true;
         this.notValidNameMessage = '';
       } else {
@@ -131,7 +131,7 @@ export default {
       }
     },
     validatePassword() {
-      if(/^[a-zA-Z0-9]{5,}$/.test(this.password)) {
+      if(/^[a-zA-Z0-9]{5,40}$/.test(this.password)) {
         this.isPasswordValid = true;
         this.notValidPassMessage = '';
       } else {

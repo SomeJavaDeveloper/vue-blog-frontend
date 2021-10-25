@@ -63,7 +63,7 @@
       <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;" class="share">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
-        <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
+            <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
       </h1>
     </div>
     <h1 style="text-align: center" @click="fetchMessages">Show more</h1>
@@ -149,25 +149,13 @@ export default {
     this.pageNumber = 0
     this.messages = []
     this.fetchMessages()
-    // fetch("/api/user")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.profile = data
-    //   this.$store.commit('updateProf', this.profile)
-    //   console.log('Current profile username:', this.profile?.username)
-    // })
-    // .catch(error => {
-    //   console.log('user getting error', error)
-    // })
   },
   methods: {
     fetchMessages() {
-      console.log(this.$route.params.username)
       fetch("/api/message/user/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
         this.messages = data
-        console.log(this.messages)
       })
       .catch(error => {
         console.log('messages getting', error)
@@ -225,7 +213,6 @@ export default {
         tags: this.tags,
         photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
       };
-      console.log(message)
       const json = JSON.stringify(message);
       const blobJson = new Blob([json], {
         type: 'application/json'
@@ -248,7 +235,6 @@ export default {
         data: data,
       })
       .then(response => {
-        console.log('Successful adding message:', data)
         this.body = ''
         this.tags = []
         if (response.status === 200)
@@ -279,10 +265,9 @@ export default {
         }
       })
       .then(response => response.text())
-      .then(response => {
-        console.log('Successful delete', response)
+      .then(
         this.messages.splice(this.messages.indexOf(message), 1)
-      })
+      )
       .catch(error => {
         console.log('Error while deleting', error)
       })
