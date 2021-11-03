@@ -86,6 +86,11 @@
           <h3>{{ tag.subscribers.length }} followers</h3>
         </div>
       </router-link>
+      <div class="show-more">
+        <router-link :to="{ name: 'Tags'}">
+          <h1>Show more</h1>
+        </router-link>
+      </div>
     </div>
 
 

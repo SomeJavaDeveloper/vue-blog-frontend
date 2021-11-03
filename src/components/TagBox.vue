@@ -3,7 +3,6 @@
     <div class="trending">
       <h1>Trending now</h1>
     </div>
-
     <router-link
       v-for="tag in tags.slice(0, 5)" :key="tag"
       :to="{ name: 'Tag', params: { tagContent: tag.content }}">
@@ -13,9 +12,9 @@
       </div>
     </router-link>
     <div class="show-more">
-      <a href="">
-        <h1>show more (todo)</h1>
-      </a>
+      <router-link :to="{ name: 'Tags'}">
+        <h1>Show more</h1>
+      </router-link>
     </div>
   </div>
 </template>

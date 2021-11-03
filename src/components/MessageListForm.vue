@@ -234,7 +234,7 @@ export default {
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
         this.tempTag = this.tempTag.substr(0, this.tempTag.length - 1)
-        if (!this.tags.includes(this.tempTag) && this.tempTag.indexOf(' ') === -1
+        if (!this.tags.includes(this.tempTag) && this.tags.length < 30 && this.tempTag.indexOf(' ') === -1
           && /^[a-zA-Z0-9]{1,16}$/.test(this.tempTag)) {
           this.tags.push(this.tempTag)
         }
@@ -243,53 +243,52 @@ export default {
     },
     // processing of created message
     handleForm() {
-      const message = {
-        body: this.body,
-        creationDate: null,
-        //////////////////////////////////
-        tags: this.tags,
-        photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
-      };
-      console.log(message)
+      if(!(this.body.trim() === '')) {
+        const message = {
+          body: this.body,
+          creationDate: null,
+          tags: this.tags,
+          photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
+        };
+        const jsonMessage = JSON.stringify(message);
+        const jsonTags = JSON.stringify(this.tags);
+        const blobJsonMessage = new Blob([jsonMessage], {
+          type: 'application/json'
+        });
+        const blobJsonTags = new Blob([jsonTags], {
+          type: 'application/json'
+        });
 
-      const jsonMessage = JSON.stringify(message);
-      const jsonTags = JSON.stringify(this.tags);
-      const blobJsonMessage = new Blob([jsonMessage], {
-        type: 'application/json'
-      });
-      const blobJsonTags = new Blob([jsonTags], {
-        type: 'application/json'
-      });
-
-      const file = this.$refs.uploadImage.files[0];
-      const blobData = new Blob([file], {
-        type: 'multipart/form-data'
-      });
-      const data = new FormData();
-      data.append("text", blobJsonMessage);
-      data.append("tags", blobJsonTags);
-      if (file)
-        data.append("file", blobData);
-      else
-        data.append("file", new Blob([], {
+        const file = this.$refs.uploadImage.files[0];
+        const blobData = new Blob([file], {
           type: 'multipart/form-data'
-        }));
+        });
+        const data = new FormData();
+        data.append("text", blobJsonMessage);
+        data.append("tags", blobJsonTags);
+        if (file)
+          data.append("file", blobData);
+        else
+          data.append("file", new Blob([], {
+            type: 'multipart/form-data'
+          }));
 
-      axios({
-        method: 'post',
-        url: '/api/message/add',
-        data: data,
-      })
-          .then(response => {
-            console.log('Successful adding message:', data)
-            this.body = ''
-            this.tags = []
-            if (response.status === 200)
-              location.href = '/'
-          })
-          .catch(error => {
-            console.log('Error happened', error)
-          })
+        axios({
+          method: 'post',
+          url: '/api/message/add',
+          data: data,
+        })
+        .then(response => {
+          console.log('Successful adding message:', data)
+          this.body = ''
+          this.tags = []
+          if (response.status === 200)
+            location.href = '/'
+        })
+        .catch(error => {
+          console.log('Error happened', error)
+        })
+      }
     },
     deleteMessage(message) {
       function getCookie(name) {

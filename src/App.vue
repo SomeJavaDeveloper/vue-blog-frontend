@@ -5,15 +5,17 @@
         <a href="/">
           <img src="https://storage.googleapis.com/vueblog-files-bucket/logo.png" alt=""/>
         </a>
-        <input type="search" maxlength="25" v-model="toFindText" size="10" placeholder="search..."/>
-        <button @click="find"><i class="fas fa-search"></i></button>
-        <a style="font-size: 16pt; margin-left: 10px">Find By Tag</a>
-        <input style="width: 40px" v-model="byTag" placeholder="Find by tags" type="checkbox"/>
+        <div v-if="$router.currentRoute.value.path === '/'">
+          <input type="search" maxlength="25" v-model="toFindText" size="10" placeholder="search..."/>
+          <button @click="find"><i class="fas fa-search"></i></button>
+          <a style="font-size: 16pt; margin-left: 10px">Find By Tag</a>
+          <input style="width: 20px; height: 15px" v-model="byTag" placeholder="Find by tags" type="checkbox"/>
+        </div>
       </div>
       <div class="header-container__right-menu">
         <!--        ONLY FOR BEAUTY NOW -->
-<!--        ///////////////-->
-        <div class="messages">
+<!--        //////////messages/////-->
+        <div v-if="profile" class="notifications">
           <router-link to="/users" class="users">
             <i class="fas fa-users"></i>
             <p>Users</p>
@@ -23,14 +25,14 @@
 <!--          <i class="fas fa-user-friends"></i>-->
 <!--          <p>subscriptions</p>-->
 <!--        </router-link>-->
-        <div class="messages">
-          <i class="fas fa-inbox"></i>
-          <p>messages</p>
-        </div>
-        <div class="notifications">
-          <i class="fas fa-bell"></i>
-          <p>notifications</p>
-        </div>
+<!--        <div class="messages">-->
+<!--          <i class="fas fa-inbox"></i>-->
+<!--          <p>messages</p>-->
+<!--        </div>-->
+<!--        <div class="notifications">-->
+<!--          <i class="fas fa-bell"></i>-->
+<!--          <p>notifications</p>-->
+<!--        </div>-->
         <router-link v-if="!profile" to="/login" class="home">
           <i class="fas fa-door-closed"></i>
           <p>Login</p>
@@ -94,6 +96,14 @@ export default {
   },
   methods: {
     find() {
+      // fetch("/api/message")
+      //     .then(response => response.json())
+      //     .then(data => {
+      //       this.$store.state.messages = data;
+      //     })
+      //     .catch(error => {
+      //       console.log(error)
+      //     })
       fetch("/api/message?filter=" + (this.toFindText ? this.toFindText : "") + "&bytag=" + this.byTag + "&page=" + this.pageNumber)
           .then(response => response.json())
           .then(data => {

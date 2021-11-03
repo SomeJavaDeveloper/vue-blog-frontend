@@ -2,7 +2,7 @@
 
 <template>
   <div class="main-container__center-container">
-    <a class="main-container__new-post" href="#new-post-popup" v-show="profile">
+    <a class="main-container__new-post" href="#new-post-popup" v-show="profile.username === $route.params.username">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       <a href="#new-post-popup">
         <button>
@@ -207,42 +207,50 @@ export default {
     },
     // processing of created message
     handleForm() {
-      const message = {
-        body: this.body,
-        creationDate: null,
-        tags: this.tags,
-        photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
-      };
-      const json = JSON.stringify(message);
-      const blobJson = new Blob([json], {
-        type: 'application/json'
-      });
-      const file = this.$refs.uploadImage.files[0];
-      const blobData = new Blob([file], {
-        type: 'multipart/form-data'
-      });
-      const data = new FormData();
-      data.append("text", blobJson);
-      if (file)
-        data.append("file", blobData);
-      else
-        data.append("file", new Blob([], {
+      if(!(this.body.trim() === '')) {
+        const message = {
+          body: this.body,
+          creationDate: null,
+          tags: this.tags,
+          photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
+        };
+        const jsonMessage = JSON.stringify(message);
+        const jsonTags = JSON.stringify(this.tags);
+        const blobJsonMessage = new Blob([jsonMessage], {
+          type: 'application/json'
+        });
+        const blobJsonTags = new Blob([jsonTags], {
+          type: 'application/json'
+        });
+
+        const file = this.$refs.uploadImage.files[0];
+        const blobData = new Blob([file], {
           type: 'multipart/form-data'
-        }));
-      axios({
-        method: 'post',
-        url: '/api/message/add',
-        data: data,
-      })
-      .then(response => {
-        this.body = ''
-        this.tags = []
-        if (response.status === 200)
-          location.href = '/'
-      })
-      .catch(error => {
-        console.log('Error happened', error)
-      })
+        });
+        const data = new FormData();
+        data.append("text", blobJsonMessage);
+        data.append("tags", blobJsonTags);
+        if (file)
+          data.append("file", blobData);
+        else
+          data.append("file", new Blob([], {
+            type: 'multipart/form-data'
+          }));
+        axios({
+          method: 'post',
+          url: '/api/message/add',
+          data: data,
+        })
+        .then(response => {
+          this.body = ''
+          this.tags = []
+          if (response.status === 200)
+            location.href = '/'
+        })
+        .catch(error => {
+          console.log('Error happened', error)
+        })
+      }
     },
     deleteMessage(message) {
       function getCookie(name) {
