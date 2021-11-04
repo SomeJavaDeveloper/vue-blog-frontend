@@ -23,7 +23,7 @@
         <router-link :to="{ name: 'Tag', params: {
             tagContent: tag.content
           }}">
-          <h1>{{ tag.content }} - {{ tag.subscribers.length }}</h1>
+          <h1>{{ tag.content }} - {{ tag.numberOfSubscribers }}</h1>
         </router-link>
 <!--        </router-link>-->
       </div>

@@ -83,7 +83,7 @@
         :to="{ name: 'Tag', params: { tagContent: tag.content }}">
         <div class="trend">
           <h1>#{{ tag.content }}</h1>
-          <h3>{{ tag.subscribers.length }} followers</h3>
+          <h3>{{ tag.numberOfSubscribers }} followers</h3>
         </div>
       </router-link>
       <div class="show-more">
