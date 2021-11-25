@@ -54,7 +54,7 @@
         <!--            #{{ tag.content }}-->
         <!--          </a>-->
         <router-link
-          v-for="tag in message.tagsContent" :key="tag"
+          v-for="tag in message.tags" :key="tag"
           :to="{ name: 'Tag', params: { tagContent: tag }}">
           #{{ tag }}
         </router-link>

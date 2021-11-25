@@ -57,7 +57,7 @@
           </div>
           <a class="post_tags">
             <router-link
-              v-for="tag in message.tagsContent" :key="tag"
+              v-for="tag in message.tags" :key="tag"
               :to="{ name: 'Tag', params: { tagContent: tag }}" @click="initialize">
               #{{ tag }}
             </router-link>

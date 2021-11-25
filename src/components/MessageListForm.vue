@@ -50,20 +50,13 @@
             </div>
           </div>
         </div>
-        <a class="post_tags">
-<!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
-<!--            #{{ tag.content }}-->
-<!--          </a>-->
-<!--          <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
-<!--            #{{ tag.content }}-->
-<!--          </a>-->
-              <router-link
-              v-for="tag in message.tagsContent" :key="tag"
-              :to="{ name: 'Tag', params: { tagContent: tag }}">
-                #{{ tag }}
-              </router-link>
-<!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
-        </a>
+      <a class="post_tags">
+        <router-link
+          v-for="tag in message.tags" :key="tag"
+          :to="{ name: 'Tag', params: { tagContent: tag }}">
+          #{{ tag }}
+        </router-link>
+      </a>
       <h1 v-if="profile" style="margin-left: 30px;" class="share">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
