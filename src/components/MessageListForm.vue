@@ -24,7 +24,7 @@
             </router-link>
           </div>
           <div style="margin-left: 6px">
-            {{ message.creationDate }}
+            {{new Date(message.creationDate).toLocaleDateString()}}  {{new Date(message.creationDate).toLocaleTimeString()}}
           </div>
 <!--          TODO: УБРАТЬ ПОСЛЕДНЕЕ СРАВНЕНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
           <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
