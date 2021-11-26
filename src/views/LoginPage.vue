@@ -1,19 +1,23 @@
 <template>
-  <h1>
-    It's a login page!
+  <h1 class="form-user-label-info">
+    Login
   </h1>
   <form>
     <form @submit.prevent="handleForm">
-      <label>Username</label>
-      <input type="text" v-model="username" @keyup="validateName" name="name"/>
+      <p class="form-user-data-alert">{{notValidNameMessage}}</p>
+      <br>
+      <input class="form-user-data-input" type="text" placeholder="Username"
+             v-model="username" @keyup="validateName" name="name"/>
       <br/>
-      <label>Password</label>
-      <input type="password" v-model="password" @keyup="validatePass" name="password"/>
+      <p class="form-user-data-alert">{{notValidPassMessage}}</p>
+      <br>
+      <input class="form-user-data-input" type="password" placeholder="Password"
+             v-model="password" @keyup="validatePass" name="password"/>
       <br/>
 
-      <button>Login user</button>
+      <button class="user-form-button">Login user</button>
     </form>
-    <h2>Not yet registered? <router-link to="/register">Register</router-link></h2>
+    <h2 style="margin-left: 36%; margin-top: 15px">Not yet registered? <router-link to="/register">Register</router-link></h2>
   </form>
 </template>
 
@@ -23,7 +27,9 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      notValidNameMessage: 'ᅠ ᅠ',
+      notValidPassMessage: 'ᅠ ᅠ',
     }
   },
   methods: {
@@ -62,9 +68,13 @@ export default {
           .then(response => {
             let status = response.status;
             if (status === 502) {
+              this.notValidNameMessage = 'Wrong login'
+              this.notValidPassMessage = 'ᅠ ᅠ'
               console.log('Wrong login')
             }
             if (status === 400) {
+              this.notValidPassMessage = 'Wrong password'
+              this.notValidNameMessage = 'ᅠ ᅠ'
               console.log('Wrong password')
             }
             if (status === 200)
@@ -76,12 +86,6 @@ export default {
             this.password = ''
             console.log(error)
           })
-    },
-    validateName() {
-      //todo username validation
-    },
-    validatePass() {
-      //todo password validation
     }
   }
 }

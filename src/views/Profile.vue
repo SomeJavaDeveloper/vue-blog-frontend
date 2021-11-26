@@ -8,7 +8,9 @@
       </div>
       <div class="main-container__name">
         <picture>
-          <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+          <img v-if="userDTO" :src="this.userDTO.photoLink" alt="">
+          <img v-else src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
+        </picture>
         <h2>
           <router-link
             :to="{ name: 'Profile',
@@ -24,6 +26,7 @@
             following:
           </router-link>
         </h2>
+        <h1>{{this.photoLink}}</h1>
         <h3>{{ this.subscriptionsCount }}</h3>
       </div>
       <div class="main-container__followers">
@@ -84,7 +87,8 @@ export default {
       path: computed(() =>this.route.path),
       isUserSubbed: false,
       subscriptionsCount: 0,
-      subscribersCount: 0
+      subscribersCount: 0,
+      userDTO: null
     }
   },
   computed: {
@@ -104,6 +108,14 @@ export default {
   methods: {
     //sending request for logout to backend
     initialize() {
+      fetch("/api/user-photo-link/" + this.$route.params.username)
+      .then(response => response.json())
+      .then(data => {
+        this.userDTO = data
+      })
+      .catch(error => {
+        console.log('photo link', error)
+      })
 
       this.initializeSubs()
 

@@ -13238,6 +13238,29 @@ input[name=r] {
   padding: 20px;
 }
 
+.form-user-label-info {
+  font-size: 18pt;
+  margin-left:36%;
+  margin-bottom: 10px;
+}
+
+.form-user-data-input {
+  border: 1px solid gainsboro;
+  width: 100%;
+  max-width: 25%;
+  height: 20px;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14pt;
+  resize: none;
+  margin-left:36%;
+  margin-bottom: 10px;
+}
+
+.form-user-data-alert {
+  margin-left: 36%; color: red;
+}
+
 .new-post-popup-tag input[type="text"] {
   border: 1px solid gainsboro;
   width: 100%;
@@ -13300,6 +13323,18 @@ input[name=r] {
 
 .new-post-popup-send {
   margin-left: 15px;
+}
+
+.user-form-button {
+  background-color: #88c0d0;
+  text-align: center;
+  padding: 6px;
+  font-size: 15pt;
+  font-weight: 700;
+  text-decoration: none;
+  color: black;
+  margin-left: 36%;
+  border-radius: 10px;
 }
 
 .new-post-popup-send button {

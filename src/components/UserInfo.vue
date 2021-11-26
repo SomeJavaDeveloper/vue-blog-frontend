@@ -5,7 +5,7 @@
     </div>
     <div class="main-container__name">
       <picture>
-        <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+        <img :src="profile.photoLink" alt=""></picture>
       <h2>
         <router-link
           :to="{ name: 'Profile', params: { username: profile.username }}">

@@ -7,7 +7,7 @@
     <div class="post_name">
       <div class="post_logo">
         <picture>
-          <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+          <img :src="user.photoLink" alt=""></picture>
       </div>
       <div>
 <!--        <router-link v-if="user == profile.id"-->

@@ -15,7 +15,7 @@
       <div class="post_name">
         <div class="post_logo">
           <picture>
-            <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+            <img :src="message.userPhotoLink" alt=""></picture>
         </div>
         <div class="post_profile_name">
           <router-link
