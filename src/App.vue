@@ -104,6 +104,7 @@ export default {
       //     .catch(error => {
       //       console.log(error)
       //     })
+      this.pageNumber = 0;
       fetch("/api/message?filter=" + (this.toFindText ? this.toFindText : "") + "&bytag=" + this.byTag + "&page=" + this.pageNumber)
           .then(response => response.json())
           .then(data => {

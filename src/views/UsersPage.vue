@@ -1,6 +1,6 @@
 <template>
 
-  <input v-model="inputName" @change="updateList" class="username-input"/>
+  <input v-model="inputName" @keyup="updateList" class="username-input"/>
 
 
   <div v-for="user in users" :key="user.id" class="user-container__user-box">

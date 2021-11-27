@@ -69,6 +69,7 @@
             <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
           </h1>
         </div>
+        <h1 style="text-align: center" @click="fetchMessages">Show more</h1>
       </div>
     </div>
 
@@ -109,15 +110,32 @@ export default {
       tagObject: null,
       tags: [],
       messages: [],
-      isUserSubbed: false
+      isUserSubbed: false,
+      pageNumber: 1
     }
   },
   mounted() {
+    this.pageNumber = 1
+    this.tags = []
     this.initializePopular()
     this.fetchTagsAndMessages(this.$route.params.tagContent)
     this.initialize()
   },
   methods: {
+    fetchMessages() {
+      fetch("/api/tags/messages/" + this.$route.params.tagContent + "?page=" + this.pageNumber)
+      .then(response => response.json())
+      .then(data => {
+        this.messages = this.messages.concat(data.filter(item =>
+          !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
+        ))
+        this.pageNumber++
+        console.log(this.pageNumber)
+      })
+      .catch(error => {
+        console.log('messages getting', error)
+      })
+    },
     openTag(newTag) {
       this.tag = newTag
       this.initializePopular()
@@ -134,7 +152,7 @@ export default {
             this.isUserSubbed = false
             this.tags.forEach(tag => {
               this.profile.subTags.forEach(userTag => {
-                if (tag.id === userTag && tag.content === this.$route.params.tagContent)
+                if (tag.id === userTag.id && tag.content === this.$route.params.tagContent)
                   this.isUserSubbed = true
               })
             })

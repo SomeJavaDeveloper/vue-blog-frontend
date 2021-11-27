@@ -1,6 +1,6 @@
 <template>
 
-  <input v-model="inputTag" @change="updateList" class="username-input"/>
+  <input v-model="inputTag" @keyup="updateList" class="username-input"/>
 
   <div v-for="tag in tags" :key="tag.id" class="user-container__user-box">
     <div class="post_name">

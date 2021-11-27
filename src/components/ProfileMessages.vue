@@ -152,10 +152,13 @@ export default {
   },
   methods: {
     fetchMessages() {
-      fetch("/api/message/user/" + this.$route.params.username)
+      fetch("/api/message/user/" + this.$route.params.username + "?page=" + this.pageNumber)
       .then(response => response.json())
       .then(data => {
-        this.messages = data
+        this.messages = this.messages.concat(data.filter(item =>
+          !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
+        ))
+        this.pageNumber++
       })
       .catch(error => {
         console.log('messages getting', error)

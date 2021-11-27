@@ -175,12 +175,10 @@ export default {
               !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
             ))
             this.$store.state.messages = this.messages
-            console.log(this.messages)
           })
           .catch(error => {
             console.log('messages getting', error)
           })
-      console.log(this.messages)
       this.pageNumber++
     },
     openTag(tag) {
