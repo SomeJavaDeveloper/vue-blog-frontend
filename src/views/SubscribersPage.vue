@@ -1,20 +1,22 @@
 <template>
 
-  <input v-model="inputName" @change="updateList"/>
-  <p>Subscribers</p>
-  <div v-if="subscribers">
-    <div v-for="subscriber in subscribers" :key="subscriber.id">
-      <p>{{ subscriber.username }}</p>
-      <br>
-    </div>
-  </div>
+  <input v-model="inputName" @change="updateList" class="username-input"/>
 
-  <div v-if="ifSearched">
-    <hr>
-    <p>Other users</p>
-    <div v-for="user in users" :key="user.id">
-      <p>{{ user.username }}</p>
-      <br>
+  <div v-for="subscriber in subscribers" :key="subscriber.id" class="user-container__user-box">
+    <div class="post_name">
+      <div class="post_logo">
+        <picture>
+          <img :src="subscriber.photoLink" alt=""></picture>
+      </div>
+      <div>
+        <router-link :to="{ name: 'Profile', params: {
+            username: subscriber.username
+          }}">
+          <h1>
+            {{ subscriber.username }}
+          </h1>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -25,10 +27,18 @@ export default {
   name: "SubscribersPage",
   data() {
     return {
-      users: [],
       subscribers: [],
-      inputName: '',
-      ifSearched: false
+      inputName: ''
+    }
+  },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
     }
   },
   mounted() {
@@ -40,14 +50,6 @@ export default {
     .catch(error => {
       console.log('subscribers getting', error)
     })
-    // fetch("/api/users-other-subscribers")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.users = data
-    // })
-    // .catch(error => {
-    //   console.log('users getting', error)
-    // })
   },
   methods: {
     updateList() {
@@ -59,16 +61,6 @@ export default {
       .catch(error => {
         console.log('subscribers getting', error)
       })
-
-      fetch("/api/users-other-subscribers?inputPattern=" + this.inputName)
-      .then(response => response.json())
-      .then(data => {
-        this.users = data
-      })
-      .catch(error => {
-        console.log('users getting', error)
-      })
-      this.ifSearched = this.inputName !== '';
     }
   }
 }

@@ -1,22 +1,25 @@
 <template>
 
-  <input v-model="inputName" @change="updateList"/>
-  <p>Subscriptions</p>
-  <div v-if="subscriptions">
-    <div v-for="subscription in subscriptions" :key="subscription.id">
-      <p>{{ subscription.username }}</p>
-      <br>
+  <input v-model="inputName" @change="updateList" class="username-input"/>
+
+  <div v-for="subscription in subscriptions" :key="subscription.id" class="user-container__user-box">
+    <div class="post_name">
+      <div class="post_logo">
+        <picture>
+          <img :src="subscription.photoLink" alt=""></picture>
+      </div>
+      <div>
+        <router-link :to="{ name: 'Profile', params: {
+            username: subscription.username
+          }}">
+          <h1>
+            {{ subscription.username }}
+          </h1>
+        </router-link>
+      </div>
     </div>
   </div>
 
-  <div v-if="ifSearched">
-    <hr>
-    <p>Other users</p>
-    <div v-for="user in users" :key="user.id">
-      <p>{{ user.username }}</p>
-      <br>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -25,10 +28,18 @@ export default {
   name: "SubscriptionsPage",
   data() {
     return {
-      users: [],
       subscriptions: [],
-      inputName: '',
-      ifSearched: false
+      inputName: ''
+    }
+  },
+  computed: {
+    profile: {
+      get() {
+        return this.$store.state.userProf
+      },
+      set(profile) {
+        this.$store.commit('updateProf', profile)
+      }
     }
   },
   mounted() {
@@ -40,14 +51,6 @@ export default {
     .catch(error => {
       console.log('subscriptions getting', error)
     })
-    // fetch("/api/users-other-subscriptions")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.users = data
-    // })
-    // .catch(error => {
-    //   console.log('users getting', error)
-    // })
   },
   methods: {
     updateList() {
@@ -59,16 +62,6 @@ export default {
       .catch(error => {
         console.log('subscriptions getting', error)
       })
-
-      fetch("/api/users-other-subscriptions?inputPattern=" + this.inputName)
-      .then(response => response.json())
-      .then(data => {
-        this.users = data
-      })
-      .catch(error => {
-        console.log('users getting', error)
-      })
-      this.ifSearched = this.inputName !== '';
     }
   }
 }

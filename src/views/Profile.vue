@@ -8,9 +8,14 @@
       </div>
       <div class="main-container__name">
         <picture>
-          <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+          <img v-if="userDTO" :src="this.userDTO.photoLink" alt="">
+          <img v-else src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt="">
+        </picture>
         <h2>
-          <router-link :to="{ name: 'Profile', params: { username: this.$route.params.username }}">{{ this.$route.params.username }}</router-link>
+          <router-link
+            :to="{ name: 'Profile',
+             params: { username: this.$route.params.username }}">
+            {{ this.$route.params.username }}</router-link>
         </h2>
         <p>'Profession'</p>
       </div>
@@ -21,16 +26,17 @@
             following:
           </router-link>
         </h2>
-        <h3>{{ followingCount.length }}</h3>
+        <h1>{{this.photoLink}}</h1>
+        <h3>{{ this.subscriptionsCount }}</h3>
       </div>
       <div class="main-container__followers">
         <h2>
           <router-link
             :to="{ name: 'SubscribersPage', params: { username: this.$route.params.username }}">
-            followers
+            followers:
           </router-link>
         </h2>
-        <h3>{{ followersCount.length }}</h3>
+        <h3>{{ this.subscribersCount }}</h3>
       </div>
 
       <div class="main-container__exit-profile"
@@ -79,9 +85,10 @@ export default {
     return {
       route: useRoute(),
       path: computed(() =>this.route.path),
-      followingCount: [],
-      followersCount: [],
-      isUserSubbed: false
+      isUserSubbed: false,
+      subscriptionsCount: 0,
+      subscribersCount: 0,
+      userDTO: null
     }
   },
   computed: {
@@ -95,24 +102,27 @@ export default {
     }
   },
   mounted() {
-    this.initializeSubs()
+    this.initialize()
     console.log(this.$route.params.username + ' PROFILE')
   },
   methods: {
     //sending request for logout to backend
-    initializeSubs() {
-      fetch("/api/subscriptions/" + this.$route.params.username + "?inputPattern=")
+    initialize() {
+      fetch("/api/user-photo-link/" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
-        this.followingCount = data
+        this.userDTO = data
       })
       .catch(error => {
-        console.log('subscriptions', error)
+        console.log('photo link', error)
       })
+
+      this.initializeSubs()
+
       fetch("/api/subscribers/" + this.$route.params.username + "?inputPattern=")
       .then(response => response.json())
       .then(data => {
-        this.followersCount = data
+        this.isUserSubbed = false
         data.forEach(user => {
           if (user.username === this.profile.username)
             this.isUserSubbed = true
@@ -120,6 +130,28 @@ export default {
       })
       .catch(error => {
         console.log('subscribers', error)
+      })
+
+      this.initializeSubs()
+
+    },
+    initializeSubs() {
+      fetch("/api/subscribers-count/" + this.$route.params.username)
+      .then(response => response.json())
+      .then(data => {
+        this.subscribersCount = data
+      })
+      .catch(error => {
+        console.log('subscribers', error)
+      })
+
+      fetch("/api/subscriptions-count/" + this.$route.params.username)
+      .then(response => response.json())
+      .then(data => {
+        this.subscriptionsCount = data
+      })
+      .catch(error => {
+        console.log('subscriptions', error)
       })
     },
     logout() {
@@ -148,19 +180,13 @@ export default {
       fetch("/api/subscribe?username=" + this.$route.params.username)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         this.profile = data
-        this.isUserSubbed = false
-        this.profile.subscriptions.forEach(user => {
-          if (user.username === this.$route.params.username)
-            this.isUserSubbed = true
-        })
+        this.isUserSubbed = !this.isUserSubbed;
       })
       .catch(error => {
-// something bad happened during the request
         console.log(error)
       })
-      this.initializeSubs()
+      this.initialize()
     },
   }
 }

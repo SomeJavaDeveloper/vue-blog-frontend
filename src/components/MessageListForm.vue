@@ -15,24 +15,19 @@
         <div class="post_name">
           <div class="post_logo">
             <picture>
-              <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+              <img :src="message.userPhotoLink" alt=""></picture>
           </div>
           <div class="post_profile_name">
-            <h1>PROFILE NAME TODO</h1>
-          </div>
-          <div class="post_profile_nickname">
-            <h2>
             <router-link
-              :to="{ name: 'Profile', params: { username: message.user.username }}">
-              {{ message.user.username }}
+              :to="{ name: 'Profile', params: { username: message.username }}">
+              <h1>{{ message.username }}</h1>
             </router-link>
-            </h2>
-<!--            <h2>{{ message.user.username }}</h2>-->
           </div>
           <div style="margin-left: 6px">
-            {{ message.creationDate }}
+            {{new Date(message.creationDate).toLocaleDateString()}}  {{new Date(message.creationDate).toLocaleTimeString()}}
           </div>
-          <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
+<!--          TODO: УБРАТЬ ПОСЛЕДНЕЕ СРАВНЕНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+          <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
@@ -55,21 +50,14 @@
             </div>
           </div>
         </div>
-        <a class="post_tags">
-<!--          <a @click="subTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
-<!--            #{{ tag.content }}-->
-<!--          </a>-->
-<!--          <a @click="openTag(tag)" href="#" v-for="tag in message.tags" :key="tag">-->
-<!--            #{{ tag.content }}-->
-<!--          </a>-->
-              <router-link
-              v-for="tag in message.tags" :key="tag"
-              :to="{ name: 'Tag', params: { tagContent: tag.content }}">
-                #{{ tag.content }}
-              </router-link>
-<!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
-        </a>
-      <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
+      <a class="post_tags">
+        <router-link
+          v-for="tag in message.tags" :key="tag"
+          :to="{ name: 'Tag', params: { tagContent: tag }}">
+          #{{ tag }}
+        </router-link>
+      </a>
+      <h1 v-if="profile" style="margin-left: 30px;" class="share">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
         <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
@@ -184,7 +172,7 @@ export default {
               console.log("That's all messages!") // todo Alert of insufficient messages
             console.log(data)
             this.messages = this.messages.concat(data.filter(item =>
-                !JSON.stringify(this.messages).includes(JSON.stringify(item))
+              !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
             ))
             this.$store.state.messages = this.messages
           })
@@ -228,13 +216,17 @@ export default {
     },
     onFileChange(e) {
       const file = e.target.files[0];
-      this.url = URL.createObjectURL(file);
+
+      if(file.size < 52428800){
+        this.url = URL.createObjectURL(file);
+      }
     },
     // tag processing of message (only for vue)
     addTag(e) {
       if (e.key === ' ' && this.tempTag) {
         this.tempTag = this.tempTag.substr(0, this.tempTag.length - 1)
-        if (!this.tags.includes(this.tempTag) && this.tempTag.indexOf(' ') === -1) {
+        if (!this.tags.includes(this.tempTag) && this.tags.length < 30 && this.tempTag.indexOf(' ') === -1
+          && /^[a-zA-Z0-9]{1,16}$/.test(this.tempTag)) {
           this.tags.push(this.tempTag)
         }
         this.tempTag = ''
@@ -242,47 +234,52 @@ export default {
     },
     // processing of created message
     handleForm() {
-      const message = {
-        body: this.body,
-        creationDate: null,
-        tags: this.tags,
-        photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
-      };
-      console.log(message)
+      if(!(this.body.trim() === '')) {
+        const message = {
+          body: this.body,
+          creationDate: null,
+          tags: this.tags,
+          photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
+        };
+        const jsonMessage = JSON.stringify(message);
+        const jsonTags = JSON.stringify(this.tags);
+        const blobJsonMessage = new Blob([jsonMessage], {
+          type: 'application/json'
+        });
+        const blobJsonTags = new Blob([jsonTags], {
+          type: 'application/json'
+        });
 
-      const json = JSON.stringify(message);
-      const blobJson = new Blob([json], {
-        type: 'application/json'
-      });
-
-      const file = this.$refs.uploadImage.files[0];
-      const blobData = new Blob([file], {
-        type: 'multipart/form-data'
-      });
-      const data = new FormData();
-      data.append("text", blobJson);
-      if (file)
-        data.append("file", blobData);
-      else
-        data.append("file", new Blob([], {
+        const file = this.$refs.uploadImage.files[0];
+        const blobData = new Blob([file], {
           type: 'multipart/form-data'
-        }));
+        });
+        const data = new FormData();
+        data.append("text", blobJsonMessage);
+        data.append("tags", blobJsonTags);
+        if (file)
+          data.append("file", blobData);
+        else
+          data.append("file", new Blob([], {
+            type: 'multipart/form-data'
+          }));
 
-      axios({
-        method: 'post',
-        url: '/api/message/add',
-        data: data,
-      })
-          .then(response => {
-            console.log('Successful adding message:', data)
-            this.body = ''
-            this.tags = []
-            if (response.status === 200)
-              location.href = '/'
-          })
-          .catch(error => {
-            console.log('Error happened', error)
-          })
+        axios({
+          method: 'post',
+          url: '/api/message/add',
+          data: data,
+        })
+        .then(response => {
+          console.log('Successful adding message:', data)
+          this.body = ''
+          this.tags = []
+          if (response.status === 200)
+            location.href = '/'
+        })
+        .catch(error => {
+          console.log('Error happened', error)
+        })
+      }
     },
     deleteMessage(message) {
       function getCookie(name) {
@@ -318,7 +315,7 @@ export default {
     }
   }
 }
-</script>
+<img src="../../public/favicon.ico"/></script>
 
 <style>
 

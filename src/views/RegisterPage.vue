@@ -1,19 +1,17 @@
 <template>
-  <h1>It's a register page!</h1>
+  <h1 class="form-user-label-info">Register</h1>
   <form>
     <form @submit.prevent="handleForm">
-      <label>Username</label>
-      <input type="text" v-model="username" @keyup="validateUsername" name="name"/>
-      <p> {{ notValidNameMessage }}</p>
+      <p class="form-user-data-alert"> {{ notValidNameMessage }}</p>
       <br/>
-        <label>Password</label>
-        <input type="password" v-model="password" @keyup="validatePassword" name="password"/>
-        <p> {{ notValidPassMessage }}</p>
+      <input class="form-user-data-input" type="text" placeholder="Username" v-model="username" @keyup="validateUsername" name="name"/>
+      <p class="form-user-data-alert"> {{ notValidPassMessage }}</p>
+      <br>
+      <input class="form-user-data-input" type="password" placeholder="Password" v-model="password" @keyup="validatePassword" name="password"/>
       <br/>
-        <label>Profile picture</label>
-        <input type="file" @change="onFileChange" ref="uploadImage" multiple accept="image/*,video/*">
+      <input style="margin-left: 36%; margin-bottom: 10px" type="file" @change="onFileChange" ref="uploadImage" multiple accept="image/*,video/*">
       <br/>
-      <button>Register user</button>
+      <button class="user-form-button">Register user</button>
     </form>
   </form>
 </template>
@@ -28,8 +26,8 @@ export default {
       password: '',
       isUsernameValid: false,
       isPasswordValid: false,
-      notValidNameMessage: '',
-      notValidPassMessage: '',
+      notValidNameMessage: 'ᅠ ',
+      notValidPassMessage: 'ᅠ ',
       url: null
     }
   },
@@ -122,18 +120,18 @@ export default {
       this.url = URL.createObjectURL(file);
     },
     validateUsername() {
-      if(/^[a-zA-Z0-9]{5,}$/.test(this.username)) {
+      if(/^[a-zA-Z0-9]{5,18}$/.test(this.username)) {
         this.isUsernameValid = true;
-        this.notValidNameMessage = '';
+        this.notValidNameMessage = 'ᅠ ';
       } else {
         this.isUsernameValid = false;
         this.notValidNameMessage = 'Invalid username';
       }
     },
     validatePassword() {
-      if(/^[a-zA-Z0-9]{5,}$/.test(this.password)) {
+      if(/^[a-zA-Z0-9]{5,40}$/.test(this.password)) {
         this.isPasswordValid = true;
-        this.notValidPassMessage = '';
+        this.notValidPassMessage = 'ᅠ ';
       } else {
         this.isPasswordValid = false;
         this.notValidPassMessage = 'Invalid password';

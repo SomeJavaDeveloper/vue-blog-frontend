@@ -2,7 +2,7 @@
 
 <template>
   <div class="main-container__center-container">
-    <a class="main-container__new-post" href="#new-post-popup" v-show="profile">
+    <a class="main-container__new-post" href="#new-post-popup" v-show="profile.username === $route.params.username">
       <picture><img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
       <a href="#new-post-popup">
         <button>
@@ -15,23 +15,18 @@
       <div class="post_name">
         <div class="post_logo">
           <picture>
-            <img src="https://storage.googleapis.com/vueblog-files-bucket/profile-logo.png" alt=""></picture>
+            <img :src="message.userPhotoLink" alt=""></picture>
         </div>
         <div class="post_profile_name">
-          <h1>PROFILE NAME TODO</h1>
-        </div>
-        <div class="post_profile_nickname">
-          <h2>
-            <router-link
-              :to="{ name: 'Profile', params: { username: message.user.username }}">
-              {{ message.user.username }}
-            </router-link>
-          </h2>
+          <router-link
+            :to="{ name: 'Profile', params: { username: message.username }}">
+            <h1>{{ message.username }}</h1>
+          </router-link>
         </div>
         <div style="margin-left: 6px">
-          {{ message.creationDate }}
+          {{new Date(message.creationDate).toLocaleDateString()}}  {{new Date(message.creationDate).toLocaleTimeString()}}
         </div>
-        <div style="margin-left: 6px" v-if="profile && profile.id === message.user.id">
+        <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
           <i @click="deleteMessage(message)" class="fas fa-trash"></i>
         </div>
       </div>
@@ -60,15 +55,15 @@
         <!--          </a>-->
         <router-link
           v-for="tag in message.tags" :key="tag"
-          :to="{ name: 'Tag', params: { tagContent: tag.content }}">
-          #{{ tag.content }}
+          :to="{ name: 'Tag', params: { tagContent: tag }}">
+          #{{ tag }}
         </router-link>
         <!--          <router-link :to="{ name: 'Profile', params: { tag: this.tag.content }}">#{{ tag.content }}</router-link>-->
       </a>
-      <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;">
+      <h1 v-if="profile" style="margin-left: 30px; margin-top: 15px;" class="share">
         <a @click="like(message.id)" style="font-size: 20px" class="far fa-heart" v-if="!message.userLikes.includes(profile.id)"></a>
         <a @click="unlike(message.id)" style="font-size: 20px" v-else class="fas fa-heart"></a>
-        <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
+            <a @click="repost(message.id)" style="font-size: 20px; margin-left: 15px" class="far fa-flag"></a>
       </h1>
     </div>
     <h1 style="text-align: center" @click="fetchMessages">Show more</h1>
@@ -154,25 +149,16 @@ export default {
     this.pageNumber = 0
     this.messages = []
     this.fetchMessages()
-    // fetch("/api/user")
-    // .then(response => response.json())
-    // .then(data => {
-    //   this.profile = data
-    //   this.$store.commit('updateProf', this.profile)
-    //   console.log('Current profile username:', this.profile?.username)
-    // })
-    // .catch(error => {
-    //   console.log('user getting error', error)
-    // })
   },
   methods: {
     fetchMessages() {
-      console.log(this.$route.params.username)
-      fetch("/api/message/user/" + this.$route.params.username)
+      fetch("/api/message/user/" + this.$route.params.username + "?page=" + this.pageNumber)
       .then(response => response.json())
       .then(data => {
-        this.messages = data
-        console.log(this.messages)
+        this.messages = this.messages.concat(data.filter(item =>
+          !JSON.parse(JSON.stringify(this.messages)).includes(JSON.parse(JSON.stringify(item)))
+        ))
+        this.pageNumber++
       })
       .catch(error => {
         console.log('messages getting', error)
@@ -224,44 +210,50 @@ export default {
     },
     // processing of created message
     handleForm() {
-      const message = {
-        body: this.body,
-        creationDate: null,
-        tags: this.tags,
-        photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
-      };
-      console.log(message)
-      const json = JSON.stringify(message);
-      const blobJson = new Blob([json], {
-        type: 'application/json'
-      });
-      const file = this.$refs.uploadImage.files[0];
-      const blobData = new Blob([file], {
-        type: 'multipart/form-data'
-      });
-      const data = new FormData();
-      data.append("text", blobJson);
-      if (file)
-        data.append("file", blobData);
-      else
-        data.append("file", new Blob([], {
+      if(!(this.body.trim() === '')) {
+        const message = {
+          body: this.body,
+          creationDate: null,
+          tags: this.tags,
+          photoLink: this.$refs.uploadImage.files[0] ? this.$refs.uploadImage.files[0].name : ''
+        };
+        const jsonMessage = JSON.stringify(message);
+        const jsonTags = JSON.stringify(this.tags);
+        const blobJsonMessage = new Blob([jsonMessage], {
+          type: 'application/json'
+        });
+        const blobJsonTags = new Blob([jsonTags], {
+          type: 'application/json'
+        });
+
+        const file = this.$refs.uploadImage.files[0];
+        const blobData = new Blob([file], {
           type: 'multipart/form-data'
-        }));
-      axios({
-        method: 'post',
-        url: '/api/message/add',
-        data: data,
-      })
-      .then(response => {
-        console.log('Successful adding message:', data)
-        this.body = ''
-        this.tags = []
-        if (response.status === 200)
-          location.href = '/'
-      })
-      .catch(error => {
-        console.log('Error happened', error)
-      })
+        });
+        const data = new FormData();
+        data.append("text", blobJsonMessage);
+        data.append("tags", blobJsonTags);
+        if (file)
+          data.append("file", blobData);
+        else
+          data.append("file", new Blob([], {
+            type: 'multipart/form-data'
+          }));
+        axios({
+          method: 'post',
+          url: '/api/message/add',
+          data: data,
+        })
+        .then(response => {
+          this.body = ''
+          this.tags = []
+          if (response.status === 200)
+            location.href = '/'
+        })
+        .catch(error => {
+          console.log('Error happened', error)
+        })
+      }
     },
     deleteMessage(message) {
       function getCookie(name) {
@@ -284,10 +276,9 @@ export default {
         }
       })
       .then(response => response.text())
-      .then(response => {
-        console.log('Successful delete', response)
+      .then(
         this.messages.splice(this.messages.indexOf(message), 1)
-      })
+      )
       .catch(error => {
         console.log('Error while deleting', error)
       })

@@ -9,6 +9,8 @@ import RegisterPage from "../views/RegisterPage";
 import SubscriptionsPage from "../views/SubscriptionsPage";
 import SubscribersPage from "../views/SubscribersPage";
 import UsersPage from "../views/UsersPage";
+import TagPage from "../views/TagPage";
+import TagsListPage from "../views/TagsListPage";
 
 
 const routes = [
@@ -18,9 +20,14 @@ const routes = [
     component: MainPage
   },
   {
+    path: '/tags',
+    name: 'Tags',
+    component: TagsListPage
+  },
+  {
     path: '/tag/:tagContent',
     name: 'Tag',
-    component: MainPage
+    component: TagPage
   },
   {
     path: '/user/:username',
