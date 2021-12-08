@@ -17,7 +17,6 @@
              params: { username: this.$route.params.username }}">
             {{ this.$route.params.username }}</router-link>
         </h2>
-        <p>'Profession'</p>
       </div>
       <div class="main-container__following">
         <h2>

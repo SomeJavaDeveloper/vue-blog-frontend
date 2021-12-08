@@ -26,8 +26,8 @@
           <div style="margin-left: 6px">
             {{new Date(message.creationDate).toLocaleDateString()}}  {{new Date(message.creationDate).toLocaleTimeString()}}
           </div>
-<!--          TODO: УБРАТЬ ПОСЛЕДНЕЕ СРАВНЕНИЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-          <div style="margin-left: 6px" v-if="profile && profile.id === message.userId">
+          <div style="margin-left: 6px"
+               v-if="(profile && (profile.username === message.username || profile.admin))">
             <i @click="deleteMessage(message)" class="fas fa-trash"></i>
           </div>
         </div>
